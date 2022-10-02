@@ -32,11 +32,11 @@ export class EspruinoTool implements IEspruinoTool {
   connect(): void {
     this.UART?.write('\x03', () => (this.connected = true));
   }
-  disconnect() {
+  disconnect(): void {
     this.UART?.close();
     this.connected = false;
   }
-  reset() {
+  reset(): void {
     this.UART.write('reset(true);\n');
   }
   async upload(url: string, flash: boolean = false) {
@@ -49,6 +49,8 @@ export class EspruinoTool implements IEspruinoTool {
     await fetchToText(url).then(async (rawCode: string) => {
       this.dump().then(async (response: string) => {
         // check if code is already on the device.
+        // if its already there set success to false,
+        //
       });
       this.reset();
       if (!flash && !success) {
