@@ -1,5 +1,4 @@
 import uart from 'espruino-ble-uart';
-import { stringifyFunction } from './puck/helpers/funcToString';
 import { IEspruinoTool } from './types/espruino-tool-types';
 
 export class EspruinoTool implements IEspruinoTool {

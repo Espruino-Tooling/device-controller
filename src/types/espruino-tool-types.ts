@@ -4,9 +4,9 @@ export interface IEspruinoTool {
   connect(): void;
   disconnect(): void;
   reset(): void;
-  dump(): void;
-  getDeviceType(): any;
-  getBattery(): any;
-  getTemperature(): any;
+  dump(): Promise<string>;
+  getDeviceType(): Promise<string>;
+  getBattery(): Promise<number>;
+  getTemperature(): Promise<number>;
   eval<T>(code: string): Promise<T>;
 }
