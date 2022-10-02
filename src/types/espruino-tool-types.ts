@@ -9,4 +9,5 @@ export interface IEspruinoTool {
   getBattery(): Promise<number>;
   getTemperature(): Promise<number>;
   eval<T>(code: string): Promise<T>;
+  upload(url: string, flash: boolean): void;
 }

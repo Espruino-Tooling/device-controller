@@ -1,4 +1,5 @@
 import uart from 'espruino-ble-uart';
+import { fetchToText } from './helpers/fetchHelper';
 import { IEspruinoTool } from './types/espruino-tool-types';
 
 export class EspruinoTool implements IEspruinoTool {
@@ -36,6 +37,30 @@ export class EspruinoTool implements IEspruinoTool {
     this.connected = false;
   }
   reset() {
-    this.UART.reset();
+    this.UART.write('reset(true);\n');
+  }
+  async upload(url: string, flash: boolean = false) {
+    let deviceType = await this.getDeviceType();
+
+    if (deviceType === 'BANGLEJS') {
+      flash = false;
+    }
+    let success = false;
+    await fetchToText(url).then(async (rawCode: string) => {
+      this.dump().then(async (response: string) => {
+        // check if code is already on the device.
+      });
+      this.reset();
+      if (!flash && !success) {
+        this.UART.write(rawCode);
+      } else if (!success && deviceType !== 'PIXLJS') {
+        this.UART.write(`E.setBootCode(\`${rawCode}\`,true);\n`);
+        this.UART.write('load();\n');
+      } else if (!success) {
+        this.UART.write(rawCode);
+        this.UART.write('save();\n');
+        this.UART.write('load();\n');
+      }
+    });
   }
 }
