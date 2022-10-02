@@ -5,56 +5,30 @@ import { IEspruinoTool } from './types/espruino-tool-types';
 export class EspruinoTool implements IEspruinoTool {
   connected: boolean;
   UART: any;
+
   constructor() {
     this.connected = false;
     this.UART = uart;
   }
-  upload(url: string): void {
-    throw new Error('Method not implemented.');
-  }
-  eval(func: Function | string) {
-    const promise = new Promise((resolve) => {
-      let callback = (data: any) => {
-        resolve(data);
-      };
-
-      this.UART.eval(
-        typeof func == typeof Function
-          ? stringifyFunction(func as Function)
-          : func,
-        callback,
-      );
-    }).catch((err) => {
-      throw Error(err);
-    });
-
-    return promise;
-  }
   async dump(): Promise<string> {
-    let str: Promise<string> = (await this.eval(
-      'E.dumpstr();\n',
-    )) as Promise<string>;
-    return str;
+    return this.eval('E.dumpStr()');
   }
-  async getDeviceType() {
-    return await this.UART.eval(`proccess.env.BOARD`, function (t: any) {
-      // find a way to pass this data back.
-      console.log(t);
+  async getDeviceType(): Promise<string> {
+    return this.eval<string>(`process.env.BOARD`);
+  }
+  async getBattery(): Promise<number> {
+    return this.eval<number>(`E.getBattery()`);
+  }
+  async getTemperature(): Promise<number> {
+    return this.eval<number>(`E.getTemperature()`);
+  }
+  async eval<T>(code: string): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+      this.UART.eval(code, function (t: T) {
+        resolve(t);
+      });
     });
   }
-  async getBattery() {
-    return await this.UART.eval(`E.getBattery()`, function (t: any) {
-      // find a way to pass this data back.
-      console.log(t);
-    });
-  }
-  async getTemperature() {
-    return await this.UART.eval(`E.getTemperature()`, function (t: any) {
-      // find a way to pass this data back.
-      console.log(t);
-    });
-  }
-
   connect(): void {
     this.UART?.write('\x03', () => (this.connected = true));
   }
@@ -64,8 +38,5 @@ export class EspruinoTool implements IEspruinoTool {
   }
   reset() {
     this.UART.reset();
-  }
-  write(code: string) {
-    this.UART.write(code);
   }
 }
