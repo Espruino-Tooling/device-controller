@@ -1,5 +1,5 @@
 import { EspruinoTool } from '../espruino-tool';
-import { stringifyFunction } from './helpers/funcToString';
+import { stringifyFunction } from '../helpers/funcToString';
 import { IPuck } from './types/puck-types';
 
 export class Puck extends EspruinoTool implements IPuck {
