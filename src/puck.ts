@@ -1,8 +1,8 @@
-import { EspruinoTool } from '../espruino-tool';
-import { stringifyFunction } from '../helpers/funcToString';
+import { DeviceController } from './device-controller';
+import { stringifyFunction } from './helpers/funcToString';
 import { IPuck } from './types/puck-types';
 
-export class Puck extends EspruinoTool implements IPuck {
+export class Puck extends DeviceController implements IPuck {
   onPress(func: Function) {
     this.UART.write('reset();\n');
     this.UART.write(`

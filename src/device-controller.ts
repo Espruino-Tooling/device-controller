@@ -1,40 +1,62 @@
-import { uart } from 'uart.ts';
+import { uart } from '@espruino-tools/uart';
 import { fetchToText } from './helpers/fetchHelper';
-import { IEspruinoTool } from './types/espruino-tool-types';
+import { IDeviceController } from './types/espruino-tool-types';
 
-export class EspruinoTool implements IEspruinoTool {
+export class DeviceController implements IDeviceController {
   connected: boolean;
   UART: any;
+  deviceType: string | undefined;
 
   constructor() {
     this.connected = false;
     this.UART = uart;
+    this.deviceType = undefined;
   }
   async dump(): Promise<string> {
-    return this.eval('E.dumpStr()');
+    return this.eval('E.dumpStr();\n');
   }
   async getDeviceType(): Promise<string> {
-    return this.eval<string>(`process.env.BOARD`);
+    return this.eval<string>(`process.env.BOARD;\n`);
   }
   async getBattery(): Promise<number> {
-    return this.eval<number>(`E.getBattery()`);
+    return this.eval<number>(`E.getBattery();\n`);
   }
   async getTemperature(): Promise<number> {
-    return this.eval<number>(`E.getTemperature()`);
+    return this.eval<number>(`E.getTemperature();\n`);
   }
   async eval<T>(code: string): Promise<T> {
-    return new Promise<T>((resolve, reject) => {
+    return new Promise<T>((resolve) => {
       this.UART.eval(code, function (t: T) {
         resolve(t);
       });
     });
   }
-  connect(): void {
-    this.UART?.write('\x03', () => (this.connected = true));
+
+  async write(code: string): Promise<void> {
+    return new Promise<void>((resolve) => {
+      this.UART.write(code, function () {
+        resolve();
+      });
+    });
   }
-  disconnect(): void {
-    this.UART?.close();
-    this.connected = false;
+
+  async connect(callback: Function) {
+    await this.write('\x03;\n').then(() => {
+      this.connected = true;
+      this.UART.write('digitalPulse(LED2,1,100);\n');
+      this.getDeviceType().then((type: string) => {
+        this.deviceType = type;
+        callback();
+      });
+    });
+  }
+  async disconnect(callback: Function) {
+    await this.write('digitalPulse(LED1,1,100);\n').then(() => {
+      this.UART?.close();
+      this.connected = false;
+      this.deviceType = undefined;
+      callback();
+    });
   }
 
   reset(): void {
