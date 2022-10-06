@@ -1,8 +1,9 @@
-export interface IEspruinoTool {
+export interface IDeviceController {
   connected: boolean;
   UART: any;
-  connect(): void;
-  disconnect(): void;
+  deviceType: string | undefined;
+  connect(callback: Function): void;
+  disconnect(callback: Function): void;
   reset(): void;
   dump(): Promise<string>;
   getDeviceType(): Promise<string>;

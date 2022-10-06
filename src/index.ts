@@ -1,6 +1,4 @@
-import { EspruinoTool } from './espruino-tool';
-import { Puck } from './puck/puck';
+import { Puck } from './puck';
+import { DeviceController } from './device-controller';
 
-export default EspruinoTool;
-
-export { Puck };
+export { Puck, DeviceController };
