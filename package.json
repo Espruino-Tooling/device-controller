@@ -39,6 +39,6 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "espruino-ble-uart": "^1.0.3"
+    "uart.ts": "^1.0.0"
   }
 }

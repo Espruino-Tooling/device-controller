@@ -1,4 +1,4 @@
-import uart from 'espruino-ble-uart';
+import { uart } from 'uart.ts';
 import { fetchToText } from './helpers/fetchHelper';
 import { IEspruinoTool } from './types/espruino-tool-types';
 
@@ -36,6 +36,7 @@ export class EspruinoTool implements IEspruinoTool {
     this.UART?.close();
     this.connected = false;
   }
+
   reset(): void {
     this.UART.write('reset(true);\n');
   }
