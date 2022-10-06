@@ -3,8 +3,12 @@ import { stringifyFunction } from './helpers/funcToString';
 import { IPuck } from './types/puck-types';
 
 export class Puck extends DeviceController implements IPuck {
+  onWebPress(obj: HTMLElement, code: string): void {
+    obj.addEventListener('click', () => {
+      this.UART.write(code);
+    });
+  }
   onPress(func: Function) {
-    this.UART.write('reset();\n');
     this.UART.write(`
     setWatch(function(){
       ${stringifyFunction(func)};
