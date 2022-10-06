@@ -1,6 +1,6 @@
 {
-  "name": "espruino-tools",
-  "version": "1.0.0",
+  "name": "@espruino-tools/device-controller",
+  "version": "0.0.1a",
   "description": "An interactive Espruino package to simplify the code interaction between Espruino device and the javascript code.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -9,8 +9,7 @@
     "build:min": "webpack",
     "lint": "tslint -p tsconfig.json",
     "test": "jest --config jestconfig.json",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm test && npm run lint"
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -38,7 +37,10 @@
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"
   },
+  "files": [
+    "lib/**/*"
+  ],
   "dependencies": {
-    "espruino-ble-uart": "^1.0.3"
+    "@espruino-tools/uart": "^1.0.0"
   }
 }
