@@ -1,4 +1,5 @@
 import { uart } from '@espruino-tools/uart';
+import { resolveConfig } from 'prettier';
 import { fetchToText } from './helpers/fetchHelper';
 import { IDeviceController } from './types/espruino-tool-types';
 
@@ -14,34 +15,56 @@ export class DeviceController implements IDeviceController {
     this.UART = uart;
     this.deviceType = undefined;
   }
+
+  /**
+   *
+   * @returns  promise containing all code stored on device
+   */
   async dump(): Promise<string> {
-    return this.eval('E.dumpStr();\n');
+    return await this.eval('E.dumpStr()');
   }
+
+  /**
+   *
+   * @returns device type of connected device
+   */
   async getDeviceType(): Promise<string> {
-    return this.eval<string>(`process.env.BOARD;\n`);
+    return await this.eval<string>(`process.env.BOARD`);
   }
+
+  /**
+   *
+   * @returns battery percentage of the connected device
+   */
   async getBattery(): Promise<number> {
-    return this.eval<number>(`E.getBattery();\n`);
-  }
-  async getTemperature(): Promise<number> {
-    return this.eval<number>(`E.getTemperature();\n`);
-  }
-  async eval<T>(code: string): Promise<T> {
-    return new Promise<T>((resolve) => {
-      this.UART.eval(code, function (t: T) {
-        resolve(t);
-      });
-    });
+    return await this.eval<number>(`E.getBattery()`);
   }
 
   async write(code: string): Promise<void> {
-    return new Promise<void>((resolve) => {
-      this.UART.write(code, function () {
-        resolve();
-      });
-    });
+    return await this.eval<void>(code);
   }
 
+  /**
+   *
+   * @param code code to be evaluated
+   * @returns the response from the device in a Promise
+   */
+  async eval<T>(code: string): Promise<T> {
+    const p = new Promise<T>((resolve) => {
+      let callback = (data: T) => {
+        resolve(data);
+      };
+      this.UART.eval(code, callback);
+    }).catch((err) => {
+      throw new Error(err);
+    });
+    return p;
+  }
+
+  /**
+   *
+   * @param callback the function to be run after connect
+   */
   async connect(callback: Function) {
     await this.write('\x03;\n').then(() => {
       this.connected = true;
@@ -52,6 +75,11 @@ export class DeviceController implements IDeviceController {
       });
     });
   }
+
+  /**
+   *
+   * @param callback the function to be run after disconnect
+   */
   async disconnect(callback: Function) {
     await this.write('digitalPulse(LED1,1,100);\n').then(() => {
       this.UART?.close();
@@ -64,6 +92,7 @@ export class DeviceController implements IDeviceController {
   reset(): void {
     this.UART.write('reset(true);\n');
   }
+
   async upload(url: string, flash: boolean = false) {
     let deviceType = await this.getDeviceType();
 

@@ -1,5 +1,6 @@
 export interface IPuck {
   onPress(func: Function): void;
+  getTemperature(): Promise<number>;
   LED: LED;
 }
 export type LEDColoursType = 'red' | 'green' | 'blue';
