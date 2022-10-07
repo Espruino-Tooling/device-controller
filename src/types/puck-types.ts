@@ -12,5 +12,5 @@ export interface LED {
   off(color: LEDColoursType): void;
   toggle(color: LEDColoursType): void;
   flash(color: LEDColoursType, ms: number): void;
-  val(color: LEDColoursType): Promise<boolean>;
+  val(color: LEDColoursType): Promise<string>;
 }

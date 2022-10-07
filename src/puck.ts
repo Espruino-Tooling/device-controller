@@ -30,7 +30,8 @@ export class Puck extends DeviceController implements IPuck {
      */
     toggle: (color: LEDColoursType): void => {
       this.LED.val(color).then((res) => {
-        !res && this.UART.write(`LED${LEDColours.indexOf(color) + 1}.set();\n`);
+        !(res === 'true') &&
+          this.UART.write(`LED${LEDColours.indexOf(color) + 1}.set();\n`);
       });
     },
 
@@ -50,7 +51,7 @@ export class Puck extends DeviceController implements IPuck {
      * @param color LED colour to grab info from
      * @returns a boolean regarding if the LED is on or off
      */
-    val: (color: LEDColoursType): Promise<boolean> => {
+    val: (color: LEDColoursType): Promise<string> => {
       return this.eval(`digitalRead(LED${LEDColours.indexOf(color) + 1}) == 1`);
     },
   };
