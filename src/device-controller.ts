@@ -2,9 +2,11 @@ import { uart } from '@espruino-tools/uart';
 import { fetchToText } from './helpers/fetchHelper';
 import { IDeviceController } from './types/espruino-tool-types';
 
+type UART = typeof uart;
+
 export class DeviceController implements IDeviceController {
   connected: boolean;
-  UART: any;
+  UART: UART;
   deviceType: string | undefined;
 
   constructor() {
