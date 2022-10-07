@@ -23,19 +23,6 @@ export class Puck extends DeviceController implements IPuck {
         ? this.UART.write(`digitalWrite(${color}, 0)`)
         : this.UART.write(`LED${LEDColours.indexOf(color) + 1}.reset();\n`);
     },
-
-    /**
-     *
-     * @param color LED Colour to be toggled on/off
-     */
-    toggle: (color: LEDColoursType): void => {
-      this.LED.val(color).then((res) => {
-        res == 'true'
-          ? this.UART.write(`LED${LEDColours.indexOf(color) + 1}.reset();\n`)
-          : this.UART.write(`LED${LEDColours.indexOf(color) + 1}.set();\n`);
-      });
-    },
-
     /**
      *
      * @param color LED Colour to be flashed
