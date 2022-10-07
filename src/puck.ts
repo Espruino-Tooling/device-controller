@@ -29,12 +29,9 @@ export class Puck extends DeviceController implements IPuck {
      * @param color LED Colour to be toggled on/off
      */
     toggle: (color: LEDColoursType): void => {
-      this.eval(`digitalRead(LED${LEDColours.indexOf(color) + 1})`).then(
-        (res) => {
-          res == '0' &&
-            this.write(`digitalRead(LED${LEDColours.indexOf(color) + 1})`);
-        },
-      );
+      this.LED.val(color).then((res) => {
+        !res && this.write(`digitalRead(LED${LEDColours.indexOf(color) + 1})`);
+      });
     },
 
     /**
