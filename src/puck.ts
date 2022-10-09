@@ -1,14 +1,84 @@
 import { DeviceController } from './device-controller';
 import { stringifyFunction } from './helpers/funcToString';
 import {
+  Accel,
+  AccelStep,
+  AccelDumpType,
   IPuck,
+  IR,
   LED,
   LEDColours,
   LEDColoursType,
+  Mag,
   NFC,
+  Pin,
 } from './types/puck-types';
 
 export class Puck extends DeviceController implements IPuck {
+  pin: Pin = {
+    val: function (): Promise<string> {
+      throw new Error('Function not implemented.');
+    },
+    onHigh: function (pin: string, func: Function): void {
+      throw new Error('Function not implemented.');
+    },
+  };
+  getLightVal(): Promise<number> {
+    throw new Error('Method not implemented.');
+  }
+  mag: Mag = {
+    enable: function (): void {
+      throw new Error('Function not implemented.');
+    },
+    disabled: function (): void {
+      throw new Error('Function not implemented.');
+    },
+    onMag: function (): void {
+      throw new Error('Function not implemented.');
+    },
+    onField: function (): void {
+      throw new Error('Function not implemented.');
+    },
+  };
+  accel: Accel = {
+    enable: function (): void {
+      throw new Error('Function not implemented.');
+    },
+    disable: function (): void {
+      throw new Error('Function not implemented.');
+    },
+    val: function (): Promise<AccelDumpType> {
+      throw new Error('Function not implemented.');
+    },
+    onAccel: function (func: Function): void {
+      throw new Error('Function not implemented.');
+    },
+    onMove: function (func: Function): void {
+      throw new Error('Function not implemented.');
+    },
+    onSignificantMove: function (func: Function): void {
+      throw new Error('Function not implemented.');
+    },
+    stepCount: {
+      enable: function (): void {
+        throw new Error('Function not implemented.');
+      },
+      disable: function (): void {
+        throw new Error('Function not implemented.');
+      },
+      get: function (): Promise<number> {
+        throw new Error('Function not implemented.');
+      },
+    } as AccelStep,
+  };
+  IR: IR = {
+    set: function (data: number[]): void {
+      throw new Error('Function not implemented.');
+    },
+    reset: function (): void {
+      throw new Error('Function not implemented.');
+    },
+  };
   LED: LED = {
     /**
      *
@@ -60,6 +130,10 @@ export class Puck extends DeviceController implements IPuck {
   };
 
   NFC: NFC = {
+    /**
+     *
+     * @param url the url to be used as the new NFC value
+     */
     setUrl: (url: string) => this.UART.write('NRF.nfcURL("' + url + '");\n'),
     reset: () => this.UART.write('NRF.nfcURL();\n'),
   };
@@ -82,5 +156,25 @@ export class Puck extends DeviceController implements IPuck {
       ${stringifyFunction(func)};
     }, BTN,{edge:"rising", repeat:true, debounce:50})
   `);
+  }
+
+  /**
+   *
+   * @param long The function to be called on a long press
+   * @param short The function to be called on a short press
+   * @param ms the time required to consider a press a long press
+   */
+  onTimedPress(long: Function, short: Function, ms: number = 0.3) {
+    this.UART.write(`
+      setWatch(function(){
+        var ms = (e.time = e.lastTime);
+
+        if(ms > ${ms}){
+          ${stringifyFunction(long)};
+        } else {
+          ${stringifyFunction(short)};
+        }
+      }, BTN,{edge:"falling", repeat:true, debounce:50})
+    `);
   }
 }
