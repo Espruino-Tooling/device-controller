@@ -1,6 +1,12 @@
 import { DeviceController } from './device-controller';
 import { stringifyFunction } from './helpers/funcToString';
-import { IPuck, LED, LEDColours, LEDColoursType } from './types/puck-types';
+import {
+  IPuck,
+  LED,
+  LEDColours,
+  LEDColoursType,
+  NFC,
+} from './types/puck-types';
 
 export class Puck extends DeviceController implements IPuck {
   LED: LED = {
@@ -23,6 +29,15 @@ export class Puck extends DeviceController implements IPuck {
         ? this.UART.write(`digitalWrite(${color}, 0)`)
         : this.UART.write(`LED${LEDColours.indexOf(color) + 1}.reset();\n`);
     },
+
+    /**
+     *
+     * @param color LED Colour to be toggled
+     */
+    toggle: (color: LEDColoursType): void => {
+      this.UART.write(`LED${LEDColours.indexOf(color) + 1}.toggle();\n`);
+    },
+
     /**
      *
      * @param color LED Colour to be flashed
@@ -42,6 +57,11 @@ export class Puck extends DeviceController implements IPuck {
     val: (color: LEDColoursType): Promise<string> => {
       return this.eval(`digitalRead(LED${LEDColours.indexOf(color) + 1}) == 1`);
     },
+  };
+
+  NFC: NFC = {
+    setUrl: (url: string) => this.UART.write('NRF.nfcURL("' + url + '");\n'),
+    reset: () => this.UART.write('NRF.nfcURL();\n'),
   };
 
   /**
