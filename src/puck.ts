@@ -60,6 +60,10 @@ export class Puck extends DeviceController implements IPuck {
   };
 
   NFC: NFC = {
+    /**
+     *
+     * @param url the url to be used as the new NFC value
+     */
     setUrl: (url: string) => this.UART.write('NRF.nfcURL("' + url + '");\n'),
     reset: () => this.UART.write('NRF.nfcURL();\n'),
   };
@@ -82,5 +86,25 @@ export class Puck extends DeviceController implements IPuck {
       ${stringifyFunction(func)};
     }, BTN,{edge:"rising", repeat:true, debounce:50})
   `);
+  }
+
+  /**
+   *
+   * @param long The function to be called on a long press
+   * @param short The function to be called on a short press
+   * @param ms the time required to consider a press a long press
+   */
+  onTimedPress(long: Function, short: Function, ms: number = 0.3) {
+    this.UART.write(`
+      setWatch(function(){
+        var ms = (e.time = e.lastTime);
+
+        if(ms > ${ms}){
+          ${stringifyFunction(long)};
+        } else {
+          ${stringifyFunction(short)};
+        }
+      }, BTN,{edge:"falling", repeat:true, debounce:50})
+    `);
   }
 }
