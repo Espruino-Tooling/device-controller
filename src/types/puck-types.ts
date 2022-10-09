@@ -1,5 +1,6 @@
 export interface IPuck {
   onPress(func: Function): void;
+  onTimedPress(long: Function, short: Function, ms: number): void;
   getTemperature(): Promise<number>;
   LED: LED;
   NFC: NFC;
