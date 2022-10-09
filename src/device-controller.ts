@@ -1,7 +1,6 @@
 import { uart } from '@espruino-tools/uart';
-import { resolveConfig } from 'prettier';
 import { fetchToText } from './helpers/fetchHelper';
-import { IDeviceController } from './types/espruino-tool-types';
+import { IDeviceController } from './types/device-controller-types';
 
 type UART = typeof uart;
 

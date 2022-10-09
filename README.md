@@ -16,25 +16,76 @@ run `npm i @espruino-tools/device-controller` in the root of your node project.
 
 from here you can use the package and example of the use is below
 
+### HTML script
+
+_this is currently not implemented_
+
 ## Usage
 
 ### Connecting to Device
-To connect to a device just import the chosen device, in this case the puck, and run the following commands;
-```javascript
 
+To connect to a device just import the chosen device, in this case the puck, and run the following commands;
+
+```javascript
 import { Puck } from '@espruino-tools/device-controller';
 
 const puck = new Puck();
 
-puck.connect()
+puck.connect();
 ```
 
 ### Disconnecting from a Device
+
 ```javascript
-puck.disconnect()
+puck.disconnect();
 ```
 
 ### Resetting a Device
+
 ```javascript
-puck.reset()
+puck.reset();
+```
+
+### Puck Specific
+
+#### LED
+
+turn on an LED
+
+```javascript
+puck.LED.on('red');
+```
+
+turn off an LED
+
+```javascript
+puck.LED.off('red');
+```
+
+flash an LED
+
+```javascript
+puck.LED.flash('red');
+```
+
+get the current value of an LED (_This currently turns off the LED on use_)
+
+```javascript
+puck.LED.val('red');
+```
+
+#### Temperature
+
+```javascript
+puck.getTemperature().then((temp) => console.log(temp));
+```
+
+#### onEvent
+
+##### onPress
+
+```javascript
+puck.onPress(() => {
+  puck.LED.flash('red');
+});
 ```
