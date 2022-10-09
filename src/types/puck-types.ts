@@ -8,7 +8,7 @@ export interface IPuck {
   mag: Mag;
   accel: Accel;
   IR: IR;
-  Pin: Pin;
+  pin: Pin;
 }
 
 export interface Pin {

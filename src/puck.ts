@@ -15,7 +15,7 @@ import {
 } from './types/puck-types';
 
 export class Puck extends DeviceController implements IPuck {
-  Pin: Pin = {
+  pin: Pin = {
     val: function (): Promise<string> {
       throw new Error('Function not implemented.');
     },
