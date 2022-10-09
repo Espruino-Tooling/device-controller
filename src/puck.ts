@@ -1,14 +1,84 @@
 import { DeviceController } from './device-controller';
 import { stringifyFunction } from './helpers/funcToString';
 import {
+  Accel,
+  AccelStep,
+  AccelDumpType,
   IPuck,
+  IR,
   LED,
   LEDColours,
   LEDColoursType,
+  Mag,
   NFC,
+  Pin,
 } from './types/puck-types';
 
 export class Puck extends DeviceController implements IPuck {
+  Pin: Pin = {
+    val: function (): Promise<string> {
+      throw new Error('Function not implemented.');
+    },
+    onHigh: function (pin: string, func: Function): void {
+      throw new Error('Function not implemented.');
+    },
+  };
+  getLightVal(): Promise<number> {
+    throw new Error('Method not implemented.');
+  }
+  mag: Mag = {
+    enable: function (): void {
+      throw new Error('Function not implemented.');
+    },
+    disabled: function (): void {
+      throw new Error('Function not implemented.');
+    },
+    onMag: function (): void {
+      throw new Error('Function not implemented.');
+    },
+    onField: function (): void {
+      throw new Error('Function not implemented.');
+    },
+  };
+  accel: Accel = {
+    enable: function (): void {
+      throw new Error('Function not implemented.');
+    },
+    disable: function (): void {
+      throw new Error('Function not implemented.');
+    },
+    val: function (): Promise<AccelDumpType> {
+      throw new Error('Function not implemented.');
+    },
+    onAccel: function (func: Function): void {
+      throw new Error('Function not implemented.');
+    },
+    onMove: function (func: Function): void {
+      throw new Error('Function not implemented.');
+    },
+    onSignificantMove: function (func: Function): void {
+      throw new Error('Function not implemented.');
+    },
+    stepCount: {
+      enable: function (): void {
+        throw new Error('Function not implemented.');
+      },
+      disable: function (): void {
+        throw new Error('Function not implemented.');
+      },
+      get: function (): Promise<number> {
+        throw new Error('Function not implemented.');
+      },
+    } as AccelStep,
+  };
+  IR: IR = {
+    set: function (data: number[]): void {
+      throw new Error('Function not implemented.');
+    },
+    reset: function (): void {
+      throw new Error('Function not implemented.');
+    },
+  };
   LED: LED = {
     /**
      *
