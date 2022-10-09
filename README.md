@@ -1,4 +1,5 @@
 ![npm](https://img.shields.io/npm/v/@espruino-tools/device-controller)
+![Azure DevOps builds (job)](https://img.shields.io/azure-devops/build/espruino-tooling/092da48c-8411-42c2-8a97-8a94b5f45468/5)
 
 # espruino-tools
 
