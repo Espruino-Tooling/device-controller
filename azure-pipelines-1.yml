@@ -3,8 +3,10 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
-pool:
-  name: default
+trigger:
+- production
+
+pool: default
 
 steps:
 - task: NodeTool@0
@@ -15,4 +17,5 @@ steps:
 - script: |
     npm install
     npm run build
-  displayName: 'npm install and build'
+    npm publish
+  displayName: 'npm install, build and publish'
