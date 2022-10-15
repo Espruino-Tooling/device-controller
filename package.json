@@ -1,6 +1,6 @@
 {
   "name": "@espruino-tools/device-controller",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "An interactive Espruino package to simplify the code interaction between Espruino device and the javascript code.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -10,7 +10,7 @@
     "lint": "tslint -p tsconfig.json",
     "test": "jest --config jestconfig.json",
     "prepare": "husky install",
-    "minorincrement":"npm version patch"
+    "minorincrement": "npm version patch"
   },
   "repository": {
     "type": "git",

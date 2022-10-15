@@ -118,7 +118,7 @@ export class DeviceController implements IDeviceController {
 
   async getDeviceFunctions(): Promise<void> {
     console.log('in getDeviceFunctions');
-    await this.dump().then((dumpedStr: string) => {
+    await this.dump().then((dumpedStr: any) => {
       console.log('getDeviceFunctions - DumpStr' + dumpedStr);
       this.#mapStringFunctionToCall(
         this.#getFunctionNamesFromString(dumpedStr),
