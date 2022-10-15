@@ -110,13 +110,16 @@ export class DeviceController implements IDeviceController {
   }
 
   #mapStringFunctionToCall(funcArr: { name: string; parameters: string[] }[]) {
+    console.log('in mapStringFunctionToCall' + funcArr);
     funcArr.map((func) => {
       this.Call = { [func.name]: func.parameters, ...this.Call };
     });
   }
 
   async getDeviceFunctions(): Promise<void> {
+    console.log('in getDeviceFunctions');
     await this.dump().then((dumpedStr: string) => {
+      console.log('getDeviceFunctions - DumpStr' + dumpedStr);
       this.#mapStringFunctionToCall(
         this.#getFunctionNamesFromString(dumpedStr),
       );
@@ -124,6 +127,7 @@ export class DeviceController implements IDeviceController {
   }
 
   #getFunctionNamesFromString(str: string) {
+    console.log('in getFunctionNamesFromString');
     let str_arr = str.split('\n');
 
     let new_arr = str_arr.map((x) => {
@@ -154,6 +158,8 @@ export class DeviceController implements IDeviceController {
     });
 
     let filtered_arr = new_arr.filter(Boolean);
+
+    console.log('getFunctionNamesFromString' + filtered_arr);
 
     return filtered_arr.map((func) => {
       return {
