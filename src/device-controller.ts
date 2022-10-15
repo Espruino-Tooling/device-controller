@@ -110,7 +110,6 @@ export class DeviceController implements IDeviceController {
   }
 
   #mapStringFunctionToCall(funcArr: { name: string; parameters: string[] }[]) {
-    console.log('in mapStringFunctionToCall' + funcArr);
     funcArr.map((func) => {
       this.Call = {
         [func.name]: ({ ...args }) => {
@@ -130,9 +129,7 @@ export class DeviceController implements IDeviceController {
   }
 
   async getDeviceFunctions(): Promise<void> {
-    console.log('in getDeviceFunctions');
     await this.dump().then((dumpedStr: any) => {
-      console.log(dumpedStr);
       this.#mapStringFunctionToCall(
         this.#getFunctionNamesFromString(dumpedStr),
       );
@@ -140,15 +137,12 @@ export class DeviceController implements IDeviceController {
   }
 
   #getFunctionNamesFromString(str: string) {
-    console.log('in getFunctionNamesFromString');
     let str_arr = str.split('\n');
 
     let new_arr = str_arr.map((x) => {
       if (x.startsWith('function')) {
-        console.log(x);
         return x.split('{')[0].replace('function', '').split(' ').join('');
       } else if (x.startsWith('let') || x.startsWith('const')) {
-        console.log(x);
         if (x.includes('function(') || x.includes('=>')) {
           if (x.includes('=>')) {
             return x
@@ -173,8 +167,6 @@ export class DeviceController implements IDeviceController {
     });
 
     let filtered_arr = new_arr.filter(Boolean);
-
-    console.log('getFunctionNamesFromString' + filtered_arr);
 
     return filtered_arr.map((func) => {
       return {
