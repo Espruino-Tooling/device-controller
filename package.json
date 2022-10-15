@@ -9,7 +9,8 @@
     "build:min": "webpack",
     "lint": "tslint -p tsconfig.json",
     "test": "jest --config jestconfig.json",
-    "prepare": "npm run build"
+    "prepare": "husky install",
+    "minorincrement":"npm version patch"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
   "homepage": "https://github.com/Espruino-Tooling/espruino-tools#readme",
   "devDependencies": {
     "@types/jest": "^29.1.1",
+    "husky": "^8.0.1",
     "jest": "^29.1.2",
     "prettier": "^2.7.1",
     "terser-webpack-plugin": "^5.3.6",

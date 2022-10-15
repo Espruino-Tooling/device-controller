@@ -8,7 +8,7 @@ export class DeviceController implements IDeviceController {
   connected: boolean = false;
   UART: UART = uart;
   deviceType: string | undefined = undefined;
-  Call: any;
+  Call: any = {};
   /**
    *
    * @returns  promise containing all code stored on device
