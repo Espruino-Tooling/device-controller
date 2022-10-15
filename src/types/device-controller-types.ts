@@ -2,6 +2,7 @@ export interface IDeviceController {
   connected: boolean;
   UART: any;
   deviceType: string | undefined;
+  Call: any;
   connect(callback: Function): void;
   disconnect(callback: Function): void;
   reset(): void;
