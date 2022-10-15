@@ -1,6 +1,6 @@
 {
   "name": "@espruino-tools/device-controller",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "An interactive Espruino package to simplify the code interaction between Espruino device and the javascript code.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -43,6 +43,6 @@
     "lib/**/*"
   ],
   "dependencies": {
-    "@espruino-tools/uart": "^1.1.1"
+    "@espruino-tools/uart": "^1.0.5"
   }
 }
