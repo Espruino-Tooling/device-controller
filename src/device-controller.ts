@@ -64,7 +64,7 @@ export class DeviceController implements IDeviceController {
       this.UART.write('digitalPulse(LED2,1,100);\n');
       this.getDeviceType().then((type: string) => {
         this.deviceType = type;
-        this.#getDeviceFunctions();
+        this.getDeviceFunctions();
         callback();
       });
     });
@@ -110,16 +110,16 @@ export class DeviceController implements IDeviceController {
   }
 
   #mapStringFunctionToCall(funcArr: { name: string; parameters: string[] }[]) {
-    funcArr.map(({ name, parameters }) => {
-      this.Call = { [name]: `(${parameters.join(',')})`, ...this.Call };
+    funcArr.map((func) => {
+      this.Call = { [func.name]: func.parameters, ...this.Call };
     });
   }
 
-  #getDeviceFunctions() {
-    this.dump().then((dumpedStr: string) => {
-      let functions_arr: { name: string; parameters: string[] }[] =
-        this.#getFunctionNamesFromString(dumpedStr);
-      this.#mapStringFunctionToCall(functions_arr);
+  async getDeviceFunctions(): Promise<void> {
+    await this.dump().then((dumpedStr: string) => {
+      this.#mapStringFunctionToCall(
+        this.#getFunctionNamesFromString(dumpedStr),
+      );
     });
   }
 
