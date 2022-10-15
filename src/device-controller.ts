@@ -111,7 +111,7 @@ export class DeviceController implements IDeviceController {
 
   #mapStringFunctionToCall(funcArr: { name: string; parameters: string[] }[]) {
     funcArr.map(({ name, parameters }) => {
-      this.Call[name] = `(${parameters.join(',')})`;
+      this.Call = { [name]: `(${parameters.join(',')})`, ...this.Call };
     });
   }
 
