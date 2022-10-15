@@ -115,9 +115,11 @@ export class DeviceController implements IDeviceController {
       this.Call = {
         [func.name]: ({ ...args }) => {
           this.UART.write(
-            `${func.name}(${args
-              .map((arg: any) => JSON.stringify(arg))
-              .join(',')})`,
+            `${func.name}(${
+              args.length > 0 && args.length == 1
+                ? args
+                : args.map((arg: any) => JSON.stringify(arg)).join(',')
+            })`,
           );
         },
         ...this.Call,
