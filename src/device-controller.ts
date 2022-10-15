@@ -5,16 +5,10 @@ import { IDeviceController } from './types/device-controller-types';
 type UART = typeof uart;
 
 export class DeviceController implements IDeviceController {
-  connected: boolean;
-  UART: UART;
-  deviceType: string | undefined;
-
-  constructor() {
-    this.connected = false;
-    this.UART = uart;
-    this.deviceType = undefined;
-  }
-
+  connected: boolean = false;
+  UART: UART = uart;
+  deviceType: string | undefined = undefined;
+  Call: any;
   /**
    *
    * @returns  promise containing all code stored on device
@@ -70,6 +64,7 @@ export class DeviceController implements IDeviceController {
       this.UART.write('digitalPulse(LED2,1,100);\n');
       this.getDeviceType().then((type: string) => {
         this.deviceType = type;
+        this.#getDeviceFunctions();
         callback();
       });
     });
@@ -100,11 +95,6 @@ export class DeviceController implements IDeviceController {
     }
     let success = false;
     await fetchToText(url).then(async (rawCode: string) => {
-      this.dump().then(async (response: string) => {
-        // check if code is already on the device.
-        // if its already there set success to false,
-        //
-      });
       this.reset();
       if (!flash && !success) {
         this.UART.write(rawCode);
@@ -116,6 +106,63 @@ export class DeviceController implements IDeviceController {
         this.UART.write('save();\n');
         this.UART.write('load();\n');
       }
+    });
+  }
+
+  #mapStringFunctionToCall(funcArr: { name: string; parameters: string[] }[]) {
+    funcArr.map(({ name, parameters }) => {
+      this.Call[name] = `(${parameters.join(',')})`;
+    });
+  }
+
+  #getDeviceFunctions() {
+    this.dump().then((dumpedStr: string) => {
+      let functions_arr: { name: string; parameters: string[] }[] =
+        this.#getFunctionNamesFromString(dumpedStr);
+      this.#mapStringFunctionToCall(functions_arr);
+    });
+  }
+
+  #getFunctionNamesFromString(str: string) {
+    let str_arr = str.split('\n');
+
+    let new_arr = str_arr.map((x) => {
+      if (x.startsWith('function')) {
+        return x.split('{')[0].replace('function', '').split(' ').join('');
+      } else if (x.startsWith('let') || x.startsWith('const')) {
+        if (x.includes('function(') || x.includes('=>')) {
+          if (x.includes('=>')) {
+            return x
+              .split('=>')[0]
+              .replace('let', '')
+              .replace('const', '')
+              .replace('=', '')
+              .split(' ')
+              .join('');
+          } else {
+            return x
+              .split('{')[0]
+              .replace('let', '')
+              .replace('const', '')
+              .replace('=', '')
+              .replace('function', '')
+              .split(' ')
+              .join('');
+          }
+        }
+      }
+    });
+
+    let filtered_arr = new_arr.filter(Boolean);
+
+    return filtered_arr.map((func) => {
+      return {
+        name: (func as string).split('(')[0],
+        parameters:
+          (func as string).split('(')[1].replace(')', '').split(',')[0] !== ''
+            ? (func as string).split('(')[1].replace(')', '').split(',')
+            : [],
+      };
     });
   }
 }
