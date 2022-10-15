@@ -119,7 +119,7 @@ export class DeviceController implements IDeviceController {
   async getDeviceFunctions(): Promise<void> {
     console.log('in getDeviceFunctions');
     await this.dump().then((dumpedStr: any) => {
-      console.log('getDeviceFunctions - DumpStr' + dumpedStr);
+      console.log(dumpedStr);
       this.#mapStringFunctionToCall(
         this.#getFunctionNamesFromString(dumpedStr),
       );
@@ -132,8 +132,10 @@ export class DeviceController implements IDeviceController {
 
     let new_arr = str_arr.map((x) => {
       if (x.startsWith('function')) {
+        console.log(x);
         return x.split('{')[0].replace('function', '').split(' ').join('');
       } else if (x.startsWith('let') || x.startsWith('const')) {
+        console.log(x);
         if (x.includes('function(') || x.includes('=>')) {
           if (x.includes('=>')) {
             return x
