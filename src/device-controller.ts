@@ -60,17 +60,16 @@ export class DeviceController implements IDeviceController {
    * @param callback the function to be run after connect
    */
   async connect(callback: Function) {
-    await this.write('\x03;\n').then(() => {
-      this.connected = this.UART.isConnected();
-      if (this.connected) {
-        this.UART.write('digitalPulse(LED2,1,100);\n');
-        this.getDeviceType().then((type: string) => {
-          this.deviceType = type;
-          this.getDeviceFunctions();
-          callback();
-        });
-      }
-    });
+    await this.UART.write('\x03;\n');
+    this.connected = this.UART.isConnected();
+    if (this.connected) {
+      this.UART.write('digitalPulse(LED2,1,100);\n');
+      this.getDeviceType().then((type: string) => {
+        this.deviceType = type;
+        this.getDeviceFunctions();
+        callback();
+      });
+    }
   }
 
   /**
