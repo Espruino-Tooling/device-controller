@@ -49,7 +49,8 @@ export class DeviceController implements IDeviceController {
       };
       this.UART.eval(code, callback);
     }).catch((err) => {
-      throw new Error(err);
+      console.log('No device connected.');
+      return new Promise<T>((resolve) => resolve(null as T));
     });
     return p;
   }
