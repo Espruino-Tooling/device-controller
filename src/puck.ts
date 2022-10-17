@@ -23,8 +23,8 @@ export class Puck extends DeviceController implements IPuck {
       throw new Error('Function not implemented.');
     },
   };
-  getLightVal(): Promise<number> {
-    throw new Error('Method not implemented.');
+  async getLightVal(): Promise<number> {
+    return await this.eval('Puck.light()');
   }
   mag: Mag = {
     enable: function (): void {
