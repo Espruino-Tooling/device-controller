@@ -34,7 +34,15 @@ export class DeviceController implements IDeviceController {
   }
 
   async write(code: string): Promise<void> {
-    return await this.eval<void>(code);
+    const p = new Promise<void>((resolve) => {
+      let callback = () => {
+        resolve();
+      };
+      this.UART.write(code, callback);
+    }).catch((err) => {
+      throw new Error(err);
+    });
+    return p;
   }
 
   /**
@@ -49,8 +57,7 @@ export class DeviceController implements IDeviceController {
       };
       this.UART.eval(code, callback);
     }).catch((err) => {
-      console.log('No device connected.');
-      return new Promise<T>((resolve) => resolve(null as T));
+      throw new Error(err);
     });
     return p;
   }
