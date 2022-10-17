@@ -33,18 +33,6 @@ export class DeviceController implements IDeviceController {
     return await this.eval<number>(`E.getBattery()`);
   }
 
-  async write(code: string): Promise<void> {
-    const p = new Promise<void>((resolve) => {
-      let callback = () => {
-        resolve();
-      };
-      this.UART.write(code, callback);
-    }).catch((err) => {
-      throw new Error(err);
-    });
-    return p;
-  }
-
   /**
    *
    * @param code code to be evaluated
@@ -68,7 +56,7 @@ export class DeviceController implements IDeviceController {
    */
   async connect(callback: Function) {
     if (!this.connected) {
-      await this.write('\x03').then((e: any) => {
+      await this.eval<any>('\x03').then((e: any) => {
         console.log(e);
         this.connected = true;
         this.UART.write('digitalPulse(LED2,1,100);\n');
@@ -86,7 +74,7 @@ export class DeviceController implements IDeviceController {
    * @param callback the function to be run after disconnect
    */
   async disconnect(callback: Function) {
-    await this.write('digitalPulse(LED1,1,100);\n').then(() => {
+    await this.eval<void>('digitalPulse(LED1,1,100);\n').then(() => {
       this.UART?.close();
       this.connected = false;
       this.deviceType = undefined;
