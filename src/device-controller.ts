@@ -55,17 +55,15 @@ export class DeviceController implements IDeviceController {
    * @param callback the function to be run after connect
    */
   async connect(callback: Function) {
-    if (!this.connected) {
-      await this.eval<any>('\x03').then(() => {
-        this.connected = true;
-        this.UART.write('digitalPulse(LED2,1,100);\n');
-        this.getDeviceType().then((type: string) => {
-          this.deviceType = type;
-          this.getDeviceFunctions();
-          callback();
-        });
+    await this.eval<void>('\x03;\n').then(() => {
+      this.connected = true;
+      this.UART.write('digitalPulse(LED2,1,100);\n');
+      this.getDeviceType().then((type: string) => {
+        this.deviceType = type;
+        this.getDeviceFunctions();
+        callback();
       });
-    }
+    });
   }
 
   /**
@@ -111,7 +109,6 @@ export class DeviceController implements IDeviceController {
     funcArr.map((func) => {
       this.Call = {
         [func.name]: (...args: any) => {
-          args.length == 0;
           this.UART.write(`${func.name}(${JSON.stringify(args.join(','))});\n`);
         },
         ...this.Call,
