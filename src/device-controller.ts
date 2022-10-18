@@ -40,8 +40,9 @@ export class DeviceController implements IDeviceController {
    */
   async eval<T>(code: string): Promise<T> {
     const p = new Promise<T>((resolve) => {
-      let callback = (data: T) => {
-        resolve(data);
+      let callback = (data: T, log?: string) => {
+        if (!log) log = '';
+        resolve({ data, log } as any);
       };
       this.UART.eval(code, callback);
     }).catch((err) => {
@@ -54,15 +55,15 @@ export class DeviceController implements IDeviceController {
    *
    * @param callback the function to be run after connect
    */
-  async connect(callback: Function) {
-    await this.eval<void>('\x03;\n').then(() => {
-      this.connected = true;
-      this.UART.write('digitalPulse(LED2,1,100);\n');
-      this.getDeviceType().then((type: string) => {
-        this.deviceType = type;
-        this.getDeviceFunctions();
-        callback();
-      });
+  async connect(callback?: Function) {
+    await this.eval<any>('{}').then(({ data, log }: any) => {
+      if (log == 'success') {
+        this.connected = true;
+        this.UART.write('digitalPulse(LED2,1,100);\n');
+        this.getDeviceFunctions().then(() => {
+          callback?.();
+        });
+      }
     });
   }
 
@@ -70,12 +71,12 @@ export class DeviceController implements IDeviceController {
    *
    * @param callback the function to be run after disconnect
    */
-  async disconnect(callback: Function) {
+  async disconnect(callback?: Function) {
     await this.eval<void>('digitalPulse(LED1,1,100);\n').then(() => {
       this.UART?.close();
       this.connected = false;
       this.deviceType = undefined;
-      callback();
+      callback?.();
     });
   }
 
@@ -120,7 +121,7 @@ export class DeviceController implements IDeviceController {
     this.Call = {};
     await this.dump().then((dumpedStr: any) => {
       this.#mapStringFunctionToCall(
-        this.#getFunctionNamesFromString(dumpedStr),
+        this.#getFunctionNamesFromString(dumpedStr.data),
       );
     });
   }
