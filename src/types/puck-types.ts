@@ -8,12 +8,6 @@ export interface IPuck {
   mag: Mag;
   accel: Accel;
   IR: IR;
-  pin: Pin;
-}
-
-export interface Pin {
-  val(): Promise<string>;
-  onHigh(pin: string, func: Function): void;
 }
 
 export type LEDColoursType = 'red' | 'green' | 'blue';

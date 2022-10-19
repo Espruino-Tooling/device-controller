@@ -1,6 +1,11 @@
 import { uart } from '@espruino-tools/uart';
 import { fetchToText } from './helpers/fetchHelper';
-import { IDeviceController } from './types/device-controller-types';
+import {
+  digitalVals,
+  IDeviceController,
+  Pin,
+  PinInfo,
+} from './types/device-controller-types';
 
 type UART = typeof uart;
 
@@ -8,7 +13,52 @@ export class DeviceController implements IDeviceController {
   connected: boolean = false;
   UART: UART = uart;
   deviceType: string | undefined = undefined;
-  Call: any;
+  Call: any = {};
+
+  Pin: Pin = {
+    /**
+     *
+     * @param pin the pin to have its value returned
+     * @returns current value of chosen pin
+     */
+    val: (pin: string): Promise<string> => this.eval(pin + '.read()'),
+
+    /**
+     *
+     * @param pin the pin to have its analog value changed
+     * @param val should be between 0 and 1, e.g. 0.5
+     */
+    analogOn: (pin: string, val: number) =>
+      this.UART.write('analogWrite(' + pin + ',' + val + ');\n'),
+
+    /**
+     *
+     * @param pin the pin to have its digital value changed
+     * @param val can be either 0 or 1 for off or on
+     */
+    digitalOn: (pin: string, val: digitalVals) =>
+      this.UART.write('digitalWrite(' + pin + ',' + val + ');\n'),
+
+    /**
+     *
+     * @param pin the pin to be toggled
+     */
+    digitalToggle: (pin: string) => this.UART.write(pin + '.toggle();\n'),
+
+    /**
+     *
+     * @param pin the pin to be reset
+     */
+    reset: (pin: string) => this.UART.write(pin + '.reset();\n'),
+
+    /**
+     *
+     * @param pin the pin to gather information from
+     * @returns a promise containing pin info
+     */
+    getInfo: (pin: string): Promise<PinInfo> => this.eval(pin + '.getInfo()'),
+  };
+
   /**
    *
    * @returns  promise containing all code stored on device
@@ -33,10 +83,6 @@ export class DeviceController implements IDeviceController {
     return await this.eval<number>(`E.getBattery()`);
   }
 
-  async write(code: string): Promise<void> {
-    return await this.eval<void>(code);
-  }
-
   /**
    *
    * @param code code to be evaluated
@@ -44,8 +90,9 @@ export class DeviceController implements IDeviceController {
    */
   async eval<T>(code: string): Promise<T> {
     const p = new Promise<T>((resolve) => {
-      let callback = (data: T) => {
-        resolve(data);
+      let callback = (data: T, log?: string) => {
+        if (!log) log = '';
+        resolve({ data, log } as any);
       };
       this.UART.eval(code, callback);
     }).catch((err) => {
@@ -58,15 +105,15 @@ export class DeviceController implements IDeviceController {
    *
    * @param callback the function to be run after connect
    */
-  async connect(callback: Function) {
-    await this.write('\x03;\n').then(() => {
-      this.connected = true;
-      this.UART.write('digitalPulse(LED2,1,100);\n');
-      this.getDeviceType().then((type: string) => {
-        this.deviceType = type;
-        this.#getDeviceFunctions();
-        callback();
-      });
+  async connect(callback?: Function) {
+    await this.eval<any>('{}').then(({ data, log }: any) => {
+      if (log == 'success') {
+        this.connected = true;
+        this.UART.write('digitalPulse(LED2,1,100);\n');
+        this.getDeviceFunctions().then(() => {
+          callback?.();
+        });
+      }
     });
   }
 
@@ -74,19 +121,27 @@ export class DeviceController implements IDeviceController {
    *
    * @param callback the function to be run after disconnect
    */
-  async disconnect(callback: Function) {
-    await this.write('digitalPulse(LED1,1,100);\n').then(() => {
+  async disconnect(callback?: Function) {
+    await this.eval<void>('digitalPulse(LED1,1,100);\n').then(() => {
       this.UART?.close();
       this.connected = false;
       this.deviceType = undefined;
-      callback();
+      callback?.();
     });
   }
 
+  /**
+   * Clears any saved data on device.
+   */
   reset(): void {
     this.UART.write('reset(true);\n');
   }
 
+  /**
+   *
+   * @param url the url to grab data from
+   * @param flash
+   */
   async upload(url: string, flash: boolean = false) {
     let deviceType = await this.getDeviceType();
 
@@ -106,24 +161,45 @@ export class DeviceController implements IDeviceController {
         this.UART.write('save();\n');
         this.UART.write('load();\n');
       }
+      this.getDeviceFunctions();
     });
   }
 
+  /**
+   *
+   * @param funcArr an array of function details type explained below
+   */
   #mapStringFunctionToCall(funcArr: { name: string; parameters: string[] }[]) {
-    funcArr.map(({ name, parameters }) => {
-      this.Call = { [name]: `(${parameters.join(',')})`, ...this.Call };
+    funcArr.map((func) => {
+      this.Call = {
+        [func.name]: (...args: any) => {
+          this.UART.write(`${func.name}(${JSON.stringify(args.join(','))});\n`);
+        },
+        ...this.Call,
+      };
     });
   }
 
-  #getDeviceFunctions() {
-    this.dump().then((dumpedStr: string) => {
-      let functions_arr: { name: string; parameters: string[] }[] =
-        this.#getFunctionNamesFromString(dumpedStr);
-      this.#mapStringFunctionToCall(functions_arr);
+  /**
+   * helper function to grab functions from device
+   */
+  async getDeviceFunctions(): Promise<void> {
+    this.Call = {};
+    await this.dump().then((dumpedStr: any) => {
+      this.#mapStringFunctionToCall(
+        this.#getFunctionNamesFromString(dumpedStr.data),
+      );
     });
   }
 
-  #getFunctionNamesFromString(str: string) {
+  /**
+   *
+   * @param str a string of code to be coverted into functions.
+   * @returns an object containing function names and parameters.
+   */
+  #getFunctionNamesFromString(
+    str: string,
+  ): { name: string; parameters: string[] }[] {
     let str_arr = str.split('\n');
 
     let new_arr = str_arr.map((x) => {
