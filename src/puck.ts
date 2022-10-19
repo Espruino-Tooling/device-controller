@@ -11,18 +11,9 @@ import {
   LEDColoursType,
   Mag,
   NFC,
-  Pin,
 } from './types/puck-types';
 
 export class Puck extends DeviceController implements IPuck {
-  pin: Pin = {
-    val: function (): Promise<string> {
-      throw new Error('Function not implemented.');
-    },
-    onHigh: function (pin: string, func: Function): void {
-      throw new Error('Function not implemented.');
-    },
-  };
   getLightVal(): Promise<number> {
     throw new Error('Method not implemented.');
   }
