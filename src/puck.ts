@@ -14,9 +14,14 @@ import {
 } from './types/puck-types';
 
 export class Puck extends DeviceController implements IPuck {
+  /**
+   *
+   * @returns a promise containing the light value detected by the puck device.
+   */
   getLightVal(): Promise<number> {
     return this.eval<number>('Puck.light()');
   }
+
   mag: Mag = {
     enable: function (): void {
       throw new Error('Function not implemented.');
@@ -31,6 +36,7 @@ export class Puck extends DeviceController implements IPuck {
       throw new Error('Function not implemented.');
     },
   };
+
   accel: Accel = {
     enable: function (): void {
       throw new Error('Function not implemented.');
@@ -63,11 +69,8 @@ export class Puck extends DeviceController implements IPuck {
     } as AccelStep,
   };
   IR: IR = {
-    set: function (data: number[]): void {
-      throw new Error('Function not implemented.');
-    },
-    reset: function (): void {
-      throw new Error('Function not implemented.');
+    transmit: (data: number[]): void => {
+      this.UART.write('[' + data.join(',') + ']');
     },
   };
   LED: LED = {

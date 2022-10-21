@@ -15,8 +15,7 @@ export type LEDColoursType = 'red' | 'green' | 'blue';
 export const LEDColours = ['red', 'green', 'blue'];
 
 export interface IR {
-  set(data: number[]): void;
-  reset(): void;
+  transmit(data: number[]): void;
 }
 
 export interface LED {
