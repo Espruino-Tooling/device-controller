@@ -51,12 +51,15 @@ export interface AccelDumpType {
 }
 
 export interface Accel {
-  enable(): void;
-  disable(): void;
+  enableAccelMovement(): void;
+  enableAccelBigMovement(): void;
+  enableAccelTilt(): void;
+  disableAccelMovement(): void;
+  disableAccelBigMovement(): void;
+  disableAccelTilt(): void;
   val(): Promise<AccelDumpType>;
-  onAccel(func: Function): void;
   onMove(func: Function): void;
-  onSignificantMove(func: Function): void;
+  onTilt(func: Function): void;
   stepCount: AccelStep;
 }
 
