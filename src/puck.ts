@@ -48,33 +48,53 @@ export class Puck extends DeviceController implements IPuck {
   };
 
   accel: Accel = {
-    enable: function (): void {
-      throw new Error('Function not implemented.');
+    enableAccelMovement: () => {
+      this.UART.write('require("puckjsv2-accel-movement").on();\n');
     },
-    disable: function (): void {
-      throw new Error('Function not implemented.');
+    enableAccelBigMovement: () => {
+      this.UART.write('require("puckjsv2-accel-bigmovement").on();\n');
     },
-    val: function (): Promise<AccelDumpType> {
-      throw new Error('Function not implemented.');
+    enableAccelTilt: () => {
+      this.UART.write('require("puckjsv2-accel-tilt").on();\n');
     },
-    onAccel: function (func: Function): void {
-      throw new Error('Function not implemented.');
+    disableAccelMovement: () => {
+      this.UART.write('require("puckjsv2-accel-movement").off();\n');
     },
-    onMove: function (func: Function): void {
-      throw new Error('Function not implemented.');
+    disableAccelBigMovement: () => {
+      this.UART.write('require("puckjsv2-accel-bigmovement").off();\n');
     },
-    onSignificantMove: function (func: Function): void {
-      throw new Error('Function not implemented.');
+    disableAccelTilt: () => {
+      this.UART.write('require("puckjsv2-accel-tilt").off();\n');
     },
+    val: (): Promise<AccelDumpType> => {
+      return this.eval<AccelDumpType>('Puck.accel()');
+    },
+
+    onMove: (func: Function): void => {
+      this.UART.write(`Puck.on('accel',function(acc){
+        ${stringifyFunction(func)}
+      });\n`);
+    },
+
+    onTilt: (func: Function): void => {
+      this.UART.write(`Puck.on('accel',function(acc){
+        ${stringifyFunction(func)}
+      });\n`);
+    },
+
     stepCount: {
-      enable: function (): void {
-        throw new Error('Function not implemented.');
+      enable: (): void => {
+        this.UART.write(`require("puckjsv2-accel-steps").on();
+        var espruino_tools_step_count = 0;
+        Puck.on('accel',function(a){
+          steps++;
+        });\n`);
       },
-      disable: function (): void {
-        throw new Error('Function not implemented.');
+      disable: (): void => {
+        this.UART.write('require("puckjsv2-accel-steps").off();\n');
       },
-      get: function (): Promise<number> {
-        throw new Error('Function not implemented.');
+      get: (): Promise<number> => {
+        return this.eval<number>('console.log(espruino_tools_step_count)');
       },
     } as AccelStep,
   };
