@@ -15,8 +15,7 @@ export type LEDColoursType = 'red' | 'green' | 'blue';
 export const LEDColours = ['red', 'green', 'blue'];
 
 export interface IR {
-  set(data: number[]): void;
-  reset(): void;
+  transmit(data: number[]): void;
 }
 
 export interface LED {
@@ -33,10 +32,12 @@ export interface NFC {
 }
 
 export interface Mag {
-  enable(): void;
-  disabled(): void;
-  onMag(): void;
-  onField(): void;
+  enableMag(): void;
+  enableField(): void;
+  disableMag(): void;
+  disableField(): void;
+  onMag(func: Function): void;
+  onField(func: Function): void;
 }
 
 export interface Points3D {

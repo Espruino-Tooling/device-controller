@@ -14,23 +14,39 @@ import {
 } from './types/puck-types';
 
 export class Puck extends DeviceController implements IPuck {
+  /**
+   *
+   * @returns a promise containing the light value detected by the puck device.
+   */
   getLightVal(): Promise<number> {
     return this.eval<number>('Puck.light()');
   }
+
   mag: Mag = {
-    enable: function (): void {
-      throw new Error('Function not implemented.');
+    enableMag: (): void => {
+      this.UART.write('Puck.magOn();\n');
     },
-    disabled: function (): void {
-      throw new Error('Function not implemented.');
+    enableField: (): void => {
+      this.UART.write('require("puckjsv2-mag-level").on();\n');
     },
-    onMag: function (): void {
-      throw new Error('Function not implemented.');
+    disableMag: (): void => {
+      this.UART.write('Puck.magOff();\n');
     },
-    onField: function (): void {
-      throw new Error('Function not implemented.');
+    disableField: (): void => {
+      this.UART.write('require("puckjsv2-mag-level").off();\n');
+    },
+    onMag: (func: Function): void => {
+      this.UART.write(`Puck.on('mag', function(){
+        ${stringifyFunction(func)}  
+      });\n`);
+    },
+    onField: (func: Function): void => {
+      this.UART.write(`Puck.on('field', function(){
+        ${stringifyFunction(func)}  
+      });\n`);
     },
   };
+
   accel: Accel = {
     enableAccelMovement: () => {
       this.UART.write('require("puckjsv2-accel-movement").on();\n');
@@ -82,14 +98,13 @@ export class Puck extends DeviceController implements IPuck {
       },
     } as AccelStep,
   };
+
   IR: IR = {
-    set: function (data: number[]): void {
-      throw new Error('Function not implemented.');
-    },
-    reset: function (): void {
-      throw new Error('Function not implemented.');
+    transmit: (data: number[]): void => {
+      this.UART.write('[' + data.join(',') + '];\n');
     },
   };
+
   LED: LED = {
     /**
      *
