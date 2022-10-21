@@ -23,17 +23,27 @@ export class Puck extends DeviceController implements IPuck {
   }
 
   mag: Mag = {
-    enable: function (): void {
-      throw new Error('Function not implemented.');
+    enableMag: (): void => {
+      this.UART.write('Puck.magOn();\n');
     },
-    disabled: function (): void {
-      throw new Error('Function not implemented.');
+    enableField: (): void => {
+      this.UART.write('require("puckjsv2-mag-level").on();\n');
     },
-    onMag: function (): void {
-      throw new Error('Function not implemented.');
+    disableMag: (): void => {
+      this.UART.write('Puck.magOff();\n');
     },
-    onField: function (): void {
-      throw new Error('Function not implemented.');
+    disableField: (): void => {
+      this.UART.write('require("puckjsv2-mag-level").off();\n');
+    },
+    onMag: (func: Function): void => {
+      this.UART.write(`Puck.on('mag', function(){
+        ${stringifyFunction(func)}  
+      });\n`);
+    },
+    onField: (func: Function): void => {
+      this.UART.write(`Puck.on('field', function(){
+        ${stringifyFunction(func)}  
+      });\n`);
     },
   };
 
@@ -68,11 +78,13 @@ export class Puck extends DeviceController implements IPuck {
       },
     } as AccelStep,
   };
+
   IR: IR = {
     transmit: (data: number[]): void => {
-      this.UART.write('[' + data.join(',') + ']');
+      this.UART.write('[' + data.join(',') + '];\n');
     },
   };
+
   LED: LED = {
     /**
      *

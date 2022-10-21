@@ -32,10 +32,12 @@ export interface NFC {
 }
 
 export interface Mag {
-  enable(): void;
-  disabled(): void;
-  onMag(): void;
-  onField(): void;
+  enableMag(): void;
+  enableField(): void;
+  disableMag(): void;
+  disableField(): void;
+  onMag(func: Function): void;
+  onField(func: Function): void;
 }
 
 export interface Points3D {
