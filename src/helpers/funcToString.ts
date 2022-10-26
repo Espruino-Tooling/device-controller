@@ -92,7 +92,7 @@ export function miniEspParser(func: Function): string {
 
   // This will grab any method call from the code for use in replace
   let deviceObjMethodRegex =
-    /(Puck|Pixl|Bangle|DeviceControl{2}er)+.+[a-zA-Z]+.+[a-zA-Z]+[\((+([a-zA-Z\d.!?\\\"\'-\\\(\s\)]+\)|\)];/g;
+    /[a-zA-Z]+.+[a-zA-Z]+.+[a-zA-Z]+[\((+([a-zA-Z\d.!?\\\"\'-\\\(\s\)]+\)|\)];/g;
 
   return stringified_func.replace(deviceObjMethodRegex, (e: string) =>
     replaceCode(e),
