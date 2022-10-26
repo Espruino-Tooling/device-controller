@@ -80,7 +80,7 @@ function replaceCode(str: string) {
   let convertedObjName = str
     .split('(')[0]
     .split('.')
-    .slice(1, -1)
+    .slice(1)
     .join('.')
     .replace(/\./g, '');
   let params = str.split('(')[1].replace(')', '').replace(/\'/g, '').split(',');
