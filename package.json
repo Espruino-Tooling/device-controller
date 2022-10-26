@@ -10,7 +10,7 @@
     "lint": "tslint -p tsconfig.json",
     "test": "jest --config jestconfig.json",
     "prepare": "husky install",
-    "minorincrement": "npm version patch",
+    "minorincrement": "npm version patch"
   },
   "repository": {
     "type": "git",
