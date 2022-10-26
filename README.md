@@ -29,7 +29,7 @@ To connect to a device just import the chosen device, in this case the puck, and
 ```javascript
 import { Puck } from '@espruino-tools/device-controller';
 
-const puck = new Puck();
+const puck = new Puck()
 
 puck.connect();
 ```
