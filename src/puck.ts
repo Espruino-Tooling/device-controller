@@ -101,7 +101,7 @@ export class Puck extends DeviceController implements IPuck {
 
   IR: IR = {
     transmit: (data: number[]): void => {
-      this.UART.write('[' + data.join(',') + '];\n');
+      this.UART.write('Puck.IR([' + data.join(',') + ']);\n');
     },
   };
 
