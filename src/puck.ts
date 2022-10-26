@@ -1,5 +1,5 @@
 import { DeviceController } from './device-controller';
-import { stringifyFunction } from './helpers/funcToString';
+import { miniEspParser } from './helpers/funcToString';
 import {
   Accel,
   AccelStep,
@@ -37,12 +37,12 @@ export class Puck extends DeviceController implements IPuck {
     },
     onMag: (func: Function): void => {
       this.UART.write(`Puck.on('mag', function(){
-        ${stringifyFunction(func)}  
+        ${miniEspParser(func)}  
       });\n`);
     },
     onField: (func: Function): void => {
       this.UART.write(`Puck.on('field', function(){
-        ${stringifyFunction(func)}  
+        ${miniEspParser(func)}  
       });\n`);
     },
   };
@@ -72,13 +72,13 @@ export class Puck extends DeviceController implements IPuck {
 
     onMove: (func: Function): void => {
       this.UART.write(`Puck.on('accel',function(acc){
-        ${stringifyFunction(func)}
+        ${miniEspParser(func)}
       });\n`);
     },
 
     onTilt: (func: Function): void => {
       this.UART.write(`Puck.on('accel',function(acc){
-        ${stringifyFunction(func)}
+        ${miniEspParser(func)}
       });\n`);
     },
 
@@ -179,7 +179,7 @@ export class Puck extends DeviceController implements IPuck {
   onPress(func: Function) {
     this.UART.write(`
     setWatch(function(){
-      ${stringifyFunction(func)};
+      ${miniEspParser(func)};
     }, BTN,{edge:"rising", repeat:true, debounce:50})
   `);
   }
@@ -196,9 +196,9 @@ export class Puck extends DeviceController implements IPuck {
         var ms = (e.time = e.lastTime);
 
         if(ms > ${ms}){
-          ${stringifyFunction(long)};
+          ${miniEspParser(long)};
         } else {
-          ${stringifyFunction(short)};
+          ${miniEspParser(short)};
         }
       }, BTN,{edge:"falling", repeat:true, debounce:50})
     `);
