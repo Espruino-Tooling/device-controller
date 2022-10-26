@@ -5,101 +5,86 @@ enum LEDEnum {
 }
 
 let modelObj: any = {
-  PuckLEDon(color: string): string {
+  LEDon(color: string): string {
     return `LED${LEDEnum[color as any]}.set();`;
   },
-  PuckLEDoff(color: string): string {
+  LEDoff(color: string): string {
     return `LED${LEDEnum[color as any]}.reset();`;
   },
-  PuckLEDtoggle(color: string): string {
+  LEDtoggle(color: string): string {
     return `LED${LEDEnum[color as any]}.toggle();`;
   },
-  PuckLEDflash(color: string, ms: number): string {
+  LEDflash(color: string, ms: number): string {
     return `digitalPulse(LED${LEDEnum[color as any]},1,${ms});`;
   },
-  PuckLEDval(color: string): string {
+  LEDval(color: string): string {
     return `digitalRead(LED${color}) == 1;`;
   },
-  PuckNFCsetUrl(url: string): string {
+  NFCsetUrl(url: string): string {
     return `NRF.nfcURL(${url});`;
   },
-  PuckNFCreset(): string {
+  NFCreset(): string {
     return `NRF.nfcURL();`;
   },
-  PuckIRtransmit(data: number[]): string {
+  IRtransmit(data: number[]): string {
     return `Puck.IR([${data.join(',')}]);`;
   },
-  PuckMagenableMag(): string {
+  MagenableMag(): string {
     return `Puck.magOn();`;
   },
-  PuckMagenableField(): string {
+  MagenableField(): string {
     return `require("puckjsv2-mag-level").on();`;
   },
-  PuckMagdisableMag(): string {
+  MagdisableMag(): string {
     return `Puck.magOff();`;
   },
-  PuckMagdisableField(): string {
+  MagdisableField(): string {
     return `require("puckjsv2-mag-level").off();`;
   },
-  PuckgetLightVal(): string {
+  getLightVal(): string {
     return `Puck.light();`;
   },
-  PuckaccelenableAccelMovement(): string {
+  accelenableAccelMovement(): string {
     return `require("puckjsv2-accel-movement").on();`;
   },
-  PuckaccelenableAccelBigMovement(): string {
+  accelenableAccelBigMovement(): string {
     return `require("puckjsv2-accel-bigmovement").on();`;
   },
-  PuckaccelenableAccelTilt(): string {
+  accelenableAccelTilt(): string {
     return `require("puckjsv2-accel-tilt").on();`;
   },
-  PuckacceldisableAccelMovement(): string {
+  acceldisableAccelMovement(): string {
     return `require("puckjsv2-accel-movement").off();`;
   },
-  PuckacceldisableAccelBigMovement(): string {
+  acceldisableAccelBigMovement(): string {
     return `require("puckjsv2-accel-bigmovement").off();`;
   },
-  PuckacceldisableAccelTilt(): string {
+  acceldisableAccelTilt(): string {
     return `require("puckjsv2-accel-tilt").off();`;
   },
-  Puckaccelval(): string {
+  accelval(): string {
     return `Puck.accel();`;
   },
-  PuckgetTemperature(): string {
+  getTemperature(): string {
     return `E.getTemperature();`;
   },
-  Puckdump(): string {
+  dump(): string {
     return `E.dumpStr();`;
   },
-  Pixldump(): string {
-    return `E.dumpStr();`;
-  },
-  Bangledump(): string {
-    return `E.dumpStr();`;
-  },
-  DeviceControllerdump(): string {
-    return `E.dumpStr();`;
-  },
-  PuckgetDeviceType(): string {
-    return `process.env.BOARD`;
-  },
-  PixlgetDeviceType(): string {
-    return `process.env.BOARD`;
-  },
-  BanglegetDeviceType(): string {
-    return `process.env.BOARD`;
-  },
-  DeviceControllergetDeviceType(): string {
+  getDeviceType(): string {
     return `process.env.BOARD`;
   },
 };
 
 function replaceCode(str: string) {
-  let convertedObjName = str.split('(')[0].replace(/\./g, '');
+  let convertedObjName = str
+    .split('(')[0]
+    .split('.')
+    .slice(1, -1)
+    .join('.')
+    .replace(/\./g, '');
   let params = str.split('(')[1].replace(')', '').replace(/\'/g, '').split(',');
-
-  console.log(modelObj[convertedObjName](...params));
-  return '';
+  return modelObj[convertedObjName](...params);
 }
 
 export function miniEspParser(func: Function): string {
