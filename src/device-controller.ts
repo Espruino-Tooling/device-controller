@@ -13,8 +13,15 @@ export class DeviceController implements IDeviceController {
   connected: boolean = false;
   UART: UART = uart;
   deviceType: string | undefined = undefined;
+
+  /**
+   * An object holding any functions on the device
+   */
   Call: any = {};
 
+  /**
+   * An Object containing all pin methods
+   */
   Pin: Pin = {
     /**
      *
