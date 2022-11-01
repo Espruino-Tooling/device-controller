@@ -137,6 +137,11 @@ export class DeviceController implements IDeviceController {
     this.UART.write('reset(true);\n');
   }
 
+  /**
+   *
+   * @param code code written in espruino native code, NOT IN THIS LIBRARIES CODE
+   * @param flash
+   */
   async loadCode(code: string, flash: boolean = false) {
     let deviceType = await this.getDeviceType();
 
