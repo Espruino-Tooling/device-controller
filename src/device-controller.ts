@@ -1,5 +1,6 @@
 import { uart } from '@espruino-tools/uart';
 import { fetchToText } from './helpers/fetchHelper';
+import { PeerToPeer } from './peer';
 import {
   digitalVals,
   IDeviceController,
@@ -14,6 +15,7 @@ export class DeviceController implements IDeviceController {
   UART: UART = uart;
   deviceType: string | undefined = undefined;
   Call: any = {};
+  static Peer: any = PeerToPeer;
 
   Pin: Pin = {
     /**
@@ -171,6 +173,11 @@ export class DeviceController implements IDeviceController {
    */
   #mapStringFunctionToCall(funcArr: { name: string; parameters: string[] }[]) {
     funcArr.map((func) => {
+      /* 
+        This anonymous function converts the array of function data into a digestible callable javascript object
+        in notation function_name : function(param1,...){}
+        It then 
+      */
       this.Call = {
         [func.name]: (...args: any) => {
           this.UART.write(`${func.name}(${JSON.stringify(args.join(','))});\n`);
