@@ -200,7 +200,7 @@ export class PeerToPeer {
     }
 
     #showNotification() {
-      let root = document.getElementsByClassName('qr-container')[0];
+      let root = document.getElementsByTagName('body')[0];
       let statusPopup = document.createElement('div');
       statusPopup.className = classes['peer-connection-notification'];
       statusPopup.innerHTML =
