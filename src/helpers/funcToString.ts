@@ -98,9 +98,3 @@ export function miniEspParser(func: Function): string {
     replaceCode(e),
   );
 }
-
-declare const Puck: any;
-
-let code = function () {
-  Puck.LED.on('green');
-};

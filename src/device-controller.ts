@@ -14,9 +14,16 @@ export class DeviceController implements IDeviceController {
   connected: boolean = false;
   UART: UART = uart;
   deviceType: string | undefined = undefined;
+
+  /**
+   * An object holding any functions on the device
+   */
   Call: any = {};
   static Peer: any = PeerToPeer;
 
+  /**
+   * An Object containing all pin methods
+   */
   Pin: Pin = {
     /**
      *
@@ -141,29 +148,38 @@ export class DeviceController implements IDeviceController {
 
   /**
    *
-   * @param url the url to grab data from
+   * @param code code written in espruino native code, NOT IN THIS LIBRARIES CODE
    * @param flash
    */
-  async upload(url: string, flash: boolean = false) {
+  async loadCode(code: string, flash: boolean = false) {
     let deviceType = await this.getDeviceType();
 
     if (deviceType === 'BANGLEJS') {
       flash = false;
     }
     let success = false;
+    this.reset();
+    if (!flash && !success) {
+      this.UART.write(code);
+    } else if (!success && deviceType !== 'PIXLJS') {
+      this.UART.write(`E.setBootCode(\`${code}\`,true);\n`);
+      this.UART.write('load();\n');
+    } else if (!success) {
+      this.UART.write(code);
+      this.UART.write('save();\n');
+      this.UART.write('load();\n');
+    }
+    this.getDeviceFunctions();
+  }
+
+  /**
+   *
+   * @param url the url to grab data from
+   * @param flash
+   */
+  async upload(url: string, flash: boolean = false) {
     await fetchToText(url).then(async (rawCode: string) => {
-      this.reset();
-      if (!flash && !success) {
-        this.UART.write(rawCode);
-      } else if (!success && deviceType !== 'PIXLJS') {
-        this.UART.write(`E.setBootCode(\`${rawCode}\`,true);\n`);
-        this.UART.write('load();\n');
-      } else if (!success) {
-        this.UART.write(rawCode);
-        this.UART.write('save();\n');
-        this.UART.write('load();\n');
-      }
-      this.getDeviceFunctions();
+      this.loadCode(rawCode, flash);
     });
   }
 
