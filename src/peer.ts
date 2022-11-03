@@ -7,16 +7,17 @@ jss.setup(preset());
 
 const styles = {
   'peer-connection-notification': {
+    fontFamily: 'Verdana, Geneva, Tahoma, sans-serif',
     position: 'fixed',
     bottom: 5,
-    left: '20%',
+    transitionDuration: '0.5s',
+    left: 'calc(50% - 175px)',
     textAlign: 'center',
-    width: '60%',
-    minWidth: 350,
+    width: 350,
     height: 50,
-    color: 'white',
-    background: '#31D084',
-    border: '2px solid #1D8251',
+    color: '#252525',
+    background: 'white',
+    border: '0.25px solid lightgray',
     borderRadius: 5,
   },
   'qr-container': {
@@ -107,7 +108,6 @@ export class PeerToPeer {
       this.peer = new Peer();
       this.peer.on('open', () => {
         this.#initialiseQR(this.peer.id);
-        console.log(this.peer.id);
       });
       this.peer.on('connection', (conn: any) => {
         conn.on('data', (data: any) => {
@@ -203,8 +203,7 @@ export class PeerToPeer {
       let root = document.getElementsByTagName('body')[0];
       let statusPopup = document.createElement('div');
       statusPopup.className = classes['peer-connection-notification'];
-      statusPopup.innerHTML =
-        '<p>Connected to Device: ' + this.peer.id + '</p>';
+      statusPopup.innerHTML = '<p>Successful connection</p>';
       root!.appendChild(statusPopup);
       setTimeout(function () {
         statusPopup!.parentElement!.removeChild(statusPopup);
