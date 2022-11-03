@@ -111,19 +111,6 @@ export class PeerToPeer {
         this.#initialiseQR(this.peer.id);
       });
       if (video) {
-        this.peer.on('call', function (call: any) {
-          call.answer();
-          call.on('stream', function (remoteStream: any) {
-            let body = document.getElementsByTagName('body')[0];
-
-            let vid = document.createElement('video');
-            vid.id = 'remote-video';
-            vid.srcObject = remoteStream;
-
-            body.appendChild(vid);
-            vid.play();
-          });
-        });
       } else {
         this.peer.on('connection', (conn: any) => {
           conn.on('data', (data: any) => {
@@ -135,6 +122,15 @@ export class PeerToPeer {
           });
         });
       }
+    }
+
+    getVideo(func: Function): any {
+      this.peer.on('call', function (call: any) {
+        call.answer();
+        call.on('stream', function (remoteStream: any) {
+          func(remoteStream);
+        });
+      });
     }
 
     onData(func: Function) {
