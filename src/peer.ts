@@ -21,6 +21,7 @@ const styles = {
     borderRadius: 5,
   },
   'qr-container': {
+    zIndex: 1000,
     fontFamily: 'Verdana, Geneva, Tahoma, sans-serif',
     '& .open-modal': {
       background: 'none',
@@ -28,7 +29,7 @@ const styles = {
         " url('https://www.svgrepo.com/show/311122/qr-code.svg')",
       backgroundSize: 'contain',
       border: 0,
-      position: 'absolute',
+      position: 'fixed',
       right: 10,
       bottom: 10,
       height: 42,
@@ -101,23 +102,39 @@ const { classes } = jss.createStyleSheet(styles).attach();
 export class PeerToPeer {
   static Host = class {
     peer: any;
-
     otherDeviceId: string;
-    constructor(otherDeviceId: string) {
+
+    constructor(otherDeviceId: string, video: boolean = false) {
       this.otherDeviceId = otherDeviceId;
       this.peer = new Peer();
       this.peer.on('open', () => {
         this.#initialiseQR(this.peer.id);
       });
-      this.peer.on('connection', (conn: any) => {
-        conn.on('data', (data: any) => {
-          if (data == 'connection-success-esp-tools') {
-            this.#showNotification();
-          } else {
-            console.log(data);
-          }
+      if (video) {
+        this.peer.on('call', function (call: any) {
+          call.answer();
+          call.on('stream', function (remoteStream: any) {
+            let body = document.getElementsByTagName('body')[0];
+
+            let vid = document.createElement('video');
+            vid.id = 'remote-video';
+            vid.srcObject = remoteStream;
+
+            body.appendChild(vid);
+            vid.play();
+          });
         });
-      });
+      } else {
+        this.peer.on('connection', (conn: any) => {
+          conn.on('data', (data: any) => {
+            if (data == 'connection-success-esp-tools') {
+              this.#showNotification();
+            } else {
+              console.log(data);
+            }
+          });
+        });
+      }
     }
 
     onData(func: Function) {
@@ -213,16 +230,40 @@ export class PeerToPeer {
   static Connector = class {
     peer: any;
     conn: any;
-    constructor() {
+    constructor(video: boolean = false) {
       this.peer = new Peer();
-      setTimeout(() => {
-        this.conn = this.peer.connect(this.#getPeerId(), function (data: any) {
-          alert(data);
+
+      if (video) {
+        var getUserMedia =
+          (navigator as any).getUserMedia ||
+          (navigator as any).webkitGetUserMedia ||
+          (navigator as any).mozGetUserMedia;
+        getUserMedia({ video: true, audio: false }, (stream: any) => {
+          var call = this.peer.call(this.#getPeerId(), stream);
+
+          let body = document.getElementsByTagName('body')[0];
+          let btn = document.createElement('button');
+          btn.id = 'close-btn-esp-tools';
+          btn.innerText = 'close connection';
+
+          btn.onclick = function () {
+            call.close();
+          };
+          body.appendChild(btn);
         });
-        this.conn.on('open', () => {
-          this.conn.send('connection-success-esp-tools');
-        });
-      }, 1000);
+      } else {
+        setTimeout(() => {
+          this.conn = this.peer.connect(
+            this.#getPeerId(),
+            function (data: any) {
+              alert(data);
+            },
+          );
+          this.conn.on('open', () => {
+            this.conn.send('connection-success-esp-tools');
+          });
+        }, 1000);
+      }
     }
 
     #getPeerId(): string {
