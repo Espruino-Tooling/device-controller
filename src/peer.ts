@@ -6,6 +6,19 @@ import preset from 'jss-preset-default';
 jss.setup(preset());
 
 const styles = {
+  'peer-connection-notification': {
+    position: 'fixed',
+    bottom: 5,
+    left: '20%',
+    textAlign: 'center',
+    width: '60%',
+    minWidth: 350,
+    height: 50,
+    color: 'white',
+    background: '#31D084',
+    border: '2px solid #1D8251',
+    borderRadius: 5,
+  },
   'qr-container': {
     fontFamily: 'Verdana, Geneva, Tahoma, sans-serif',
     '& .open-modal': {
@@ -87,19 +100,39 @@ const { classes } = jss.createStyleSheet(styles).attach();
 export class PeerToPeer {
   static Host = class {
     peer: any;
-    id: string = '';
+
     otherDeviceId: string;
     constructor(otherDeviceId: string) {
       this.otherDeviceId = otherDeviceId;
       this.peer = new Peer();
       this.peer.on('open', () => {
-        console.log('opening');
         this.#initialiseQR(this.peer.id);
+        console.log(this.peer.id);
+      });
+      this.peer.on('connection', (conn: any) => {
+        conn.on('data', (data: any) => {
+          if (data == 'connection-success-esp-tools') {
+            this.#showNotification();
+          } else {
+            console.log(data);
+          }
+        });
+      });
+    }
+
+    onData(func: Function) {
+      this.peer.on('connection', (conn: any) => {
+        conn.on('data', (data: any) => {
+          if (data == 'connection-success-esp-tools') {
+            this.#showNotification();
+          } else {
+            func(data);
+          }
+        });
       });
     }
 
     #initialiseQR(id: string) {
-      console.log('in the initialiser');
       let path = `${this.otherDeviceId}?id=${id}`;
 
       QRCode.toCanvas(
@@ -164,6 +197,39 @@ export class PeerToPeer {
           body.appendChild(qrcontainer);
         },
       );
+    }
+
+    #showNotification() {
+      let root = document.getElementsByClassName('qr-container')[0];
+      let statusPopup = document.createElement('div');
+      statusPopup.className = classes['peer-connection-notification'];
+      statusPopup.innerHTML =
+        '<p>Connected to Device: ' + this.peer.id + '</p>';
+      root!.appendChild(statusPopup);
+      setTimeout(function () {
+        statusPopup!.parentElement!.removeChild(statusPopup);
+      }, 2000);
+    }
+  };
+  static Connector = class {
+    peer: any;
+    conn: any;
+    constructor() {
+      this.peer = new Peer();
+      setTimeout(() => {
+        this.conn = this.peer.connect(this.#getPeerId(), function (data: any) {
+          alert(data);
+        });
+        this.conn.on('open', () => {
+          this.conn.send('connection-success-esp-tools');
+        });
+      }, 1000);
+    }
+
+    #getPeerId(): string {
+      const urlSearchParams = new URLSearchParams(window.location.search);
+      const params = Object.fromEntries(urlSearchParams.entries());
+      return params.id;
     }
   };
 }
