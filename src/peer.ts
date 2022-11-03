@@ -226,7 +226,7 @@ export class PeerToPeer {
   static Connector = class {
     peer: any;
     conn: any;
-    constructor(video: boolean = false) {
+    constructor(video: boolean = false, direction: string = 'front') {
       this.peer = new Peer();
 
       if (video) {
@@ -234,19 +234,29 @@ export class PeerToPeer {
           (navigator as any).getUserMedia ||
           (navigator as any).webkitGetUserMedia ||
           (navigator as any).mozGetUserMedia;
-        getUserMedia({ video: true, audio: false }, (stream: any) => {
-          var call = this.peer.call(this.#getPeerId(), stream);
+        getUserMedia(
+          {
+            video: {
+              facingMode: {
+                exact: direction == 'front' ? 'user' : 'environment',
+              },
+            },
+            audio: false,
+          },
+          (stream: any) => {
+            var call = this.peer.call(this.#getPeerId(), stream);
 
-          let body = document.getElementsByTagName('body')[0];
-          let btn = document.createElement('button');
-          btn.id = 'close-btn-esp-tools';
-          btn.innerText = 'close connection';
+            let body = document.getElementsByTagName('body')[0];
+            let btn = document.createElement('button');
+            btn.id = 'close-btn-esp-tools';
+            btn.innerText = 'close connection';
 
-          btn.onclick = function () {
-            call.close();
-          };
-          body.appendChild(btn);
-        });
+            btn.onclick = function () {
+              call.close();
+            };
+            body.appendChild(btn);
+          },
+        );
       } else {
         setTimeout(() => {
           this.conn = this.peer.connect(
