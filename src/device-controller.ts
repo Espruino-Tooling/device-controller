@@ -1,6 +1,5 @@
 import { uart } from '@espruino-tools/uart';
 import { fetchToText } from './helpers/fetchHelper';
-import { PeerToPeer } from './peer';
 import {
   digitalVals,
   IDeviceController,
@@ -19,7 +18,6 @@ export class DeviceController implements IDeviceController {
    * An object holding any functions on the device
    */
   Call: any = {};
-  static Peer: any = PeerToPeer;
 
   /**
    * An Object containing all pin methods

@@ -1,6 +1,6 @@
 ![npm](https://img.shields.io/npm/v/@espruino-tools/device-controller)
 
-# espruino-tools
+# Espruino Tools -> Core
 
 An interactive Espruino package to simplify the code interaction between Espruino device and the javascript code. This package intends to simplift the implementation of the [uart.ts]("123") package by making it more suitable to building stand alone web applications which incorporate web bluetooth espruino devices.
 
@@ -29,7 +29,7 @@ To connect to a device just import the chosen device, in this case the puck, and
 ```javascript
 import { Puck } from '@espruino-tools/device-controller';
 
-const puck = new Puck()
+const puck = new Puck();
 
 puck.connect();
 ```

@@ -1,6 +1,6 @@
 {
-  "name": "@espruino-tools/device-controller",
-  "version": "2.1.0",
+  "name": "@espruino-tools/core",
+  "version": "1.0.2",
   "description": "An interactive Espruino package to simplify the code interaction between Espruino device and the javascript code.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -50,11 +50,7 @@
     "lib/**/*"
   ],
   "dependencies": {
-    "@espruino-tools/uart": "^1.4.0",
-    "jss": "^10.9.2",
-    "jss-preset-default": "^10.9.2",
-    "peerjs": "^1.4.7",
-    "qrcode": "^1.5.1"
+    "@espruino-tools/uart": "^1.4.0"
   },
   "config": {
     "commitizen": {
