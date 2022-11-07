@@ -1,4 +1,4 @@
-![npm](https://img.shields.io/npm/v/@espruino-tools/device-controller)
+![npm](https://img.shields.io/npm/v/@espruino-tools/core)
 
 ![building](https://img.shields.io/azure-devops/build/espruino-tooling/092da48c-8411-42c2-8a97-8a94b5f45468/5)
 ![deploy](https://img.shields.io/azure-devops/build/espruino-tooling/092da48c-8411-42c2-8a97-8a94b5f45468/9?label=deployment)
