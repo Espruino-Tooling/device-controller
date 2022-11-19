@@ -8,8 +8,10 @@ module.exports = {
     main: './src/index.ts',
   },
   output: {
-    path: path.resolve(__dirname, './build'),
-    filename: 'espruino-tools.min.js', // <--- Will be compiled to this single file
+    path: path.resolve(__dirname, './min'),
+    filename: 'main.min.js', // <--- Will be compiled to this single file
+    libraryTarget: 'var',
+    library: 'ESPT_core',
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],

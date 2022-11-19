@@ -1,8 +1,7 @@
-![npm](https://img.shields.io/npm/v/@espruino-tools/device-controller)
-
-![building](https://img.shields.io/azure-devops/build/espruino-tooling/092da48c-8411-42c2-8a97-8a94b5f45468/5)
-![deploy](https://img.shields.io/azure-devops/build/espruino-tooling/092da48c-8411-42c2-8a97-8a94b5f45468/9?label=deployment)
-# Espruino Tools -> Core
+![npm](https://img.shields.io/npm/v/@espruino-tools/core)
+![building](https://img.shields.io/azure-devops/build/espruino-tooling/Espruino%2520tools/14)
+![deploy](https://img.shields.io/azure-devops/build/espruino-tooling/Espruino%2520tools/14?color=blue&label=deployment)
+# @espruino-tools/core
 
 
 An interactive Espruino package to simplify the code interaction between Espruino device and the javascript code. This package intends to simplift the implementation of the [uart.ts]("123") package by making it more suitable to building stand alone web applications which incorporate web bluetooth espruino devices.
