@@ -1,5 +1,6 @@
 import { uart } from '@espruino-tools/uart';
 import { fetchToText } from './helpers/fetchHelper';
+import { miniEspParser } from './helpers/funcToString';
 import {
   digitalVals,
   IDeviceController,
@@ -168,6 +169,14 @@ export class DeviceController implements IDeviceController {
       this.UART.write('load();\n');
     }
     this.getDeviceFunctions();
+  }
+
+  setInterval(func: Function, ms: number = 2000) {
+    this.UART.write(`
+    setInterval(function(){
+      ${miniEspParser(func)};
+    }, ${ms})
+  `);
   }
 
   /**
