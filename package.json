@@ -51,7 +51,7 @@
     "min/**/*"
   ],
   "dependencies": {
-    "@espruino-tools/uart": "^1.4.0"
+    "@espruino-tools/uart": "^1.5.6"
   },
   "config": {
     "commitizen": {
