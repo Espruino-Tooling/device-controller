@@ -8,7 +8,8 @@
     "build": "tsc",
     "build:min": "webpack",
     "lint": "tslint -p tsconfig.json",
-    "test": "jest --config jestconfig.json",
+    "test": "jest --config jestconfig.json --silent --maxWorkers 1",
+    "test:dev":"jest --config jestconfig.json",
     "prepare": "husky install",
     "minorincrement": "npm version patch"
   },
@@ -51,7 +52,9 @@
     "min/**/*"
   ],
   "dependencies": {
-    "@espruino-tools/uart": "^1.5.6"
+    "@espruino-tools/uart": "^1.5.6",
+    "@types/jsdom": "^20.0.1",
+    "jsdom": "^20.0.3"
   },
   "config": {
     "commitizen": {
