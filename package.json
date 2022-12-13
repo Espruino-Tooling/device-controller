@@ -1,6 +1,6 @@
 {
   "name": "@espruino-tools/core",
-  "version": "1.1.16",
+  "version": "1.1.17",
   "description": "An interactive Espruino package to simplify the code interaction between Espruino device and the javascript code.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -67,23 +67,23 @@
       "commit-msg": "commitlint --env HUSKY_GIT_PARAMS"
     }
   },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ],
-    "rules": {
-      "subject-case": [
-        2,
-        "never",
-        [
-          "start-case",
-          "pascal-case"
-        ]
-      ]
+  "standard-version": {
+    "skip": {
+      "changelog": true
     },
-    "standard-version": {
-      "skip": {
-        "changelog": true
+    "commitlint": {
+      "extends": [
+        "@commitlint/config-conventional"
+      ],
+      "rules": {
+        "subject-case": [
+          2,
+          "never",
+          [
+            "start-case",
+            "pascal-case"
+          ]
+        ]
       }
     }
   }
