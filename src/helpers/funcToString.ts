@@ -6,70 +6,70 @@ enum LEDEnum {
 
 let modelObj: any = {
   LEDon(color: string): string {
-    return `LED${LEDEnum[color as any]}.set();`;
+    return `LED${LEDEnum[color as any]}.set()`;
   },
   LEDoff(color: string): string {
-    return `LED${LEDEnum[color as any]}.reset();`;
+    return `LED${LEDEnum[color as any]}.reset()`;
   },
   LEDtoggle(color: string): string {
-    return `LED${LEDEnum[color as any]}.toggle();`;
+    return `LED${LEDEnum[color as any]}.toggle()`;
   },
   LEDflash(color: string, ms: number): string {
-    return `digitalPulse(LED${LEDEnum[color as any]},1,${ms});`;
+    return `digitalPulse(LED${LEDEnum[color as any]},1,${ms})`;
   },
   LEDval(color: string): string {
-    return `digitalRead(LED${color}) == 1;`;
+    return `digitalRead(LED${color}) == 1`;
   },
   NFCsetUrl(url: string): string {
-    return `NRF.nfcURL(${url});`;
+    return `NRF.nfcURL(${url})`;
   },
   NFCreset(): string {
-    return `NRF.nfcURL();`;
+    return `NRF.nfcURL()`;
   },
   IRtransmit(data: number[]): string {
-    return `Puck.IR([${data.join(',')}]);`;
+    return `Puck.IR([${data.join(',')}])`;
   },
   MagenableMag(): string {
-    return `Puck.magOn();`;
+    return `Puck.magOn()`;
   },
   MagenableField(): string {
-    return `require("puckjsv2-mag-level").on();`;
+    return `require("puckjsv2-mag-level").on()`;
   },
   MagdisableMag(): string {
-    return `Puck.magOff();`;
+    return `Puck.magOff()`;
   },
   MagdisableField(): string {
-    return `require("puckjsv2-mag-level").off();`;
+    return `require("puckjsv2-mag-level").off()`;
   },
   getLightVal(): string {
-    return `Puck.light();`;
+    return `Puck.light()`;
   },
   accelenableAccelMovement(): string {
-    return `require("puckjsv2-accel-movement").on();`;
+    return `require("puckjsv2-accel-movement").on()`;
   },
   accelenableAccelBigMovement(): string {
-    return `require("puckjsv2-accel-bigmovement").on();`;
+    return `require("puckjsv2-accel-bigmovement").on()`;
   },
   accelenableAccelTilt(): string {
-    return `require("puckjsv2-accel-tilt").on();`;
+    return `require("puckjsv2-accel-tilt").on()`;
   },
   acceldisableAccelMovement(): string {
-    return `require("puckjsv2-accel-movement").off();`;
+    return `require("puckjsv2-accel-movement").off()`;
   },
   acceldisableAccelBigMovement(): string {
-    return `require("puckjsv2-accel-bigmovement").off();`;
+    return `require("puckjsv2-accel-bigmovement").off()`;
   },
   acceldisableAccelTilt(): string {
-    return `require("puckjsv2-accel-tilt").off();`;
+    return `require("puckjsv2-accel-tilt").off()`;
   },
   accelval(): string {
-    return `Puck.accel();`;
+    return `Puck.accel()`;
   },
   getTemperature(): string {
-    return `E.getTemperature();`;
+    return `E.getTemperature()`;
   },
   dump(): string {
-    return `E.dumpStr();`;
+    return `E.dumpStr()`;
   },
   getDeviceType(): string {
     return `process.env.BOARD`;

@@ -4,4 +4,3 @@ min
 .DS_Store
 test-env
 test-env-mob
-.husky/pre-commit
