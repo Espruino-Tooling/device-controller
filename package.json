@@ -11,7 +11,8 @@
     "test": "jest --config jestconfig.json --silent --maxWorkers 1",
     "test:dev": "jest --config jestconfig.json",
     "prepare": "husky install",
-    "minorincrement": "npm version patch"
+    "minorincrement": "npm version patch",
+    "release" : "standard-version"
   },
   "repository": {
     "type": "git",
@@ -37,6 +38,7 @@
     "prettier": "^2.7.1",
     "sass": "^1.55.0",
     "sass-loader": "^13.1.0",
+    "standard-version": "^9.5.0",
     "style-loader": "^3.3.1",
     "terser-webpack-plugin": "^5.3.6",
     "ts-jest": "^29.0.3",
@@ -66,10 +68,19 @@
       "commit-msg": "commitlint --env HUSKY_GIT_PARAMS"
     }
   },
-  "commitlint":{
-    "extends": ["@commitlint/config-conventional"],
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ],
     "rules": {
-      "subject-case": [2, "never", ["start-case", "pascal-case"]]
+      "subject-case": [
+        2,
+        "never",
+        [
+          "start-case",
+          "pascal-case"
+        ]
+      ]
     }
   }
 }
