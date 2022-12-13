@@ -1,6 +1,6 @@
 {
   "name": "@espruino-tools/core",
-  "version": "1.1.10",
+  "version": "1.1.11",
   "description": "An interactive Espruino package to simplify the code interaction between Espruino device and the javascript code.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -11,7 +11,6 @@
     "test": "jest --config jestconfig.json --silent --maxWorkers 1",
     "test:dev": "jest --config jestconfig.json",
     "prepare": "husky install",
-    "minorincrement": "npm version patch",
     "release": "standard-version --no-verify"
   },
   "repository": {
