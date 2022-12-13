@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.2](https://github.com/Espruino-Tooling/espruino-tools/compare/v1.2.1...v1.2.2) (2022-12-13)
+
+
+### Bug Fixes
+
+* removed old package.json versioning script ([0933be9](https://github.com/Espruino-Tooling/espruino-tools/commit/0933be9f473b123e13d1828114f5dee261d0ef27))
+
 ### [1.2.1](https://github.com/Espruino-Tooling/espruino-tools/compare/v1.1.30...v1.2.1) (2022-12-13)
 
 ### [1.1.18](https://github.com/Espruino-Tooling/espruino-tools/compare/v1.1.30...v1.1.18) (2022-12-13)
