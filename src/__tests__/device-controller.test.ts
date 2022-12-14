@@ -13,7 +13,7 @@ describe('eval', () => {
   let device = DeviceControllerMock;
 
   device.eval('{}').then(() => {
-    expect((device.UART as typeof UartMock).writtenData).toBe('{}');
+    expect((device.UART as any).writtenData).toBe('{}');
   });
 });
 
@@ -22,7 +22,7 @@ describe('pin', () => {
     let device = DeviceControllerMock;
 
     device.Pin.val('D1').then(() => {
-      expect((device.UART as typeof UartMock).writtenData).toBe('D1.read()');
+      expect((device.UART as any).writtenData).toBe('D1.read()');
     });
   });
   it('analogOn', () => {
@@ -37,9 +37,7 @@ describe('pin', () => {
     });
 
     p.then(() => {
-      expect((device.UART as typeof UartMock).writtenData).toBe(
-        'analogWrite(D1,1);\n',
-      );
+      expect((device.UART as any).writtenData).toBe('analogWrite(D1,1);\n');
     });
   });
   it('digitalOn', () => {
@@ -54,9 +52,7 @@ describe('pin', () => {
     });
 
     p.then(() => {
-      expect((device.UART as typeof UartMock).writtenData).toBe(
-        'digitalWrite(D1,1);\n',
-      );
+      expect((device.UART as any).writtenData).toBe('digitalWrite(D1,1);\n');
     });
   });
   it('digitalToggle', () => {
@@ -71,9 +67,7 @@ describe('pin', () => {
     });
 
     p.then(() => {
-      expect((device.UART as typeof UartMock).writtenData).toBe(
-        'D1.toggle();\n',
-      );
+      expect((device.UART as any).writtenData).toBe('D1.toggle();\n');
     });
   });
   it('reset', () => {
@@ -88,16 +82,14 @@ describe('pin', () => {
     });
 
     p.then(() => {
-      expect((device.UART as typeof UartMock).writtenData).toBe(
-        'D1.reset();\n',
-      );
+      expect((device.UART as any).writtenData).toBe('D1.reset();\n');
     });
   });
   it('getInfo', () => {
     let device = DeviceControllerMock;
 
     device.Pin.getInfo('D1').then(() => {
-      expect((device.UART as typeof UartMock).writtenData).toBe('D1.getInfo()');
+      expect((device.UART as any).writtenData).toBe('D1.getInfo()');
     });
   });
 });
@@ -107,7 +99,7 @@ describe('connection', () => {
     let device = DeviceControllerMock;
 
     device.connect().then(() => {
-      expect((device.UART as typeof UartMock).writtenData).toBe('{}');
+      expect((device.UART as any).writtenData).toBe('{}');
     });
   });
 
@@ -115,7 +107,7 @@ describe('connection', () => {
     let device = DeviceControllerMock;
 
     device.disconnect().then(() => {
-      expect((device.UART as typeof UartMock).writtenData).toBe(
+      expect((device.UART as any).writtenData).toBe(
         'digitalPulse(LED1,1,100);\n',
       );
     });
@@ -127,9 +119,7 @@ describe('get device type', () => {
     let device = DeviceControllerMock;
 
     device.getDeviceType().then(() => {
-      expect((device.UART as typeof UartMock).writtenData).toBe(
-        'process.env.BOARD',
-      );
+      expect((device.UART as any).writtenData).toBe('process.env.BOARD');
     });
   });
 });
@@ -139,7 +129,7 @@ describe('get device dump', () => {
     let device = DeviceControllerMock;
 
     device.dump().then(() => {
-      expect((device.UART as typeof UartMock).writtenData).toBe('E.dumpStr()');
+      expect((device.UART as any).writtenData).toBe('E.dumpStr()');
     });
   });
 });
@@ -149,9 +139,7 @@ describe('get device battery', () => {
     let device = DeviceControllerMock;
 
     device.getBattery().then(() => {
-      expect((device.UART as typeof UartMock).writtenData).toBe(
-        'E.getBattery()',
-      );
+      expect((device.UART as any).writtenData).toBe('E.getBattery()');
     });
   });
 });
@@ -169,9 +157,7 @@ describe('reset device', () => {
     });
 
     p.then(() => {
-      expect((device.UART as typeof UartMock).writtenData).toBe(
-        'reset(true);\n',
-      );
+      expect((device.UART as any).writtenData).toBe('reset(true);\n');
     });
   });
 });
@@ -194,7 +180,7 @@ describe('set Interval', () => {
     });
 
     p.then(() => {
-      expect((device.UART as typeof UartMock).writtenData).toBe(
+      expect((device.UART as any).writtenData).toBe(
         `
     setInterval(function(){
                   LED1.set();;
@@ -220,9 +206,7 @@ describe('upload code', () => {
     });
 
     p.then(() => {
-      expect((device.UART as typeof UartMock).writtenData).toBe(
-        "console.log('hello')",
-      );
+      expect((device.UART as any).writtenData).toBe("console.log('hello')");
     });
   });
 });
