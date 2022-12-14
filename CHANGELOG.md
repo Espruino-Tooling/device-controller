@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.5](https://github.com/Espruino-Tooling/espruino-tools/compare/v1.2.4...v1.2.5) (2022-12-14)
+
+
+### Bug Fixes
+
+* updated UART implementation ([cb520d2](https://github.com/Espruino-Tooling/espruino-tools/commit/cb520d28a9060fc712efeb063b4f601d88fe1cf0))
+
 ### [1.2.4](https://github.com/Espruino-Tooling/espruino-tools/compare/v1.2.3...v1.2.4) (2022-12-14)
 
 ### [1.2.3](https://github.com/Espruino-Tooling/espruino-tools/compare/v1.2.2...v1.2.3) (2022-12-14)
