@@ -20,5 +20,6 @@ steps:
       npm install
       npm run build
       npm run build:min
+      npm run test
       npm publish
     displayName: 'npm install, build and publish'

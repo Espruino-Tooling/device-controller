@@ -1,6 +1,6 @@
-![npm](https://img.shields.io/npm/v/@espruino-tools/core)
-![building](https://img.shields.io/azure-devops/build/espruino-tooling/Espruino%2520tools/14)
-![deploy](https://img.shields.io/azure-devops/build/espruino-tooling/Espruino%2520tools/14?color=blue&label=deployment)
+![npm][npm version badge]
+![building][package building state]
+![deploy][package deployment state]
 
 # @espruino-tools/core
 
@@ -35,3 +35,7 @@ puck.connect();
 ```
 
 Further information on package functionality can be found on the documentation [here]("https://documentation-espruino-tools.vercel.app/")
+
+[npm version badge]: https://img.shields.io/npm/v/@espruino-tools/core
+[package building state]: https://img.shields.io/azure-devops/build/espruino-tooling/Espruino%2520tools/14
+[package deployment state]: https://img.shields.io/azure-devops/build/espruino-tooling/Espruino%2520tools/14?color=blue&label=deployment
