@@ -1,6 +1,6 @@
 {
   "name": "@espruino-tools/core",
-  "version": "1.2.2",
+  "version": "1.2.4",
   "description": "An interactive Espruino package to simplify the code interaction between Espruino device and the javascript code.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -53,7 +53,7 @@
     "min/**/*"
   ],
   "dependencies": {
-    "@espruino-tools/uart": "^1.5.6",
+    "@espruino-tools/uart": "^1.7.4",
     "@types/jsdom": "^20.0.1",
     "jsdom": "^20.0.3"
   },
