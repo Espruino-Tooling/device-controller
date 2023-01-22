@@ -1,5 +1,5 @@
+import { transpile } from '@espruino-tools/transpiler';
 import { DeviceController } from './device-controller';
-import { miniEspParser } from './helpers/funcToString';
 import {
   Accel,
   AccelDumpType,
@@ -35,14 +35,18 @@ export class Puck extends DeviceController implements IPuck {
       this.UART.write('require("puckjsv2-mag-level").off();\n');
     },
     onMag: (func: Function): void => {
-      this.UART.write(`Puck.on('mag', function(){
-        ${miniEspParser(func)}  
-      });\n`);
+      let transpiled_code = transpile(`p.mag.onMag(${func.toString()})`, {
+        additional_callees: ['p'],
+        parse_type: 'module',
+      });
+      this.UART.write(transpiled_code);
     },
     onField: (func: Function): void => {
-      this.UART.write(`Puck.on('field', function(){
-        ${miniEspParser(func)}  
-      });\n`);
+      let transpiled_code = transpile(`p.mag.onField(${func.toString()})`, {
+        additional_callees: ['p'],
+        parse_type: 'module',
+      });
+      this.UART.write(transpiled_code);
     },
   };
 
@@ -70,15 +74,19 @@ export class Puck extends DeviceController implements IPuck {
     },
 
     onMove: (func: Function): void => {
-      this.UART.write(`Puck.on('accel',function(acc){
-        ${miniEspParser(func)}
-      });\n`);
+      let transpiled_code = transpile(`p.accel.onMove(${func.toString()})`, {
+        additional_callees: ['p'],
+        parse_type: 'module',
+      });
+      this.UART.write(transpiled_code);
     },
 
     onTilt: (func: Function): void => {
-      this.UART.write(`Puck.on('accel',function(acc){
-        ${miniEspParser(func)}
-      });\n`);
+      let transpiled_code = transpile(`p.accel.onTilt(${func.toString()})`, {
+        additional_callees: ['p'],
+        parse_type: 'module',
+      });
+      this.UART.write(transpiled_code);
     },
   };
 
@@ -160,11 +168,11 @@ export class Puck extends DeviceController implements IPuck {
    * @param func A function to be run of press of pucks button
    */
   onPress(func: Function) {
-    this.UART.write(`
-    setWatch(function(){
-      ${miniEspParser(func)};
-    }, BTN,{edge:"rising", repeat:true, debounce:50})
-  `);
+    let transpiled_code = transpile(`p.onTimedPress(${func.toString()})`, {
+      additional_callees: ['p'],
+      parse_type: 'module',
+    });
+    this.UART.write(transpiled_code);
   }
 
   /**
@@ -174,16 +182,13 @@ export class Puck extends DeviceController implements IPuck {
    * @param ms the time required to consider a press a long press
    */
   onTimedPress(long: Function, short: Function, ms: number = 0.3) {
-    this.UART.write(`
-      setWatch(function(){
-        var ms = (e.time = e.lastTime);
-
-        if(ms > ${ms}){
-          ${miniEspParser(long)};
-        } else {
-          ${miniEspParser(short)};
-        }
-      }, BTN,{edge:"falling", repeat:true, debounce:50})
-    `);
+    let transpiled_code = transpile(
+      `p.onTimedPress(${long.toString()},${short.toString()},${ms})`,
+      {
+        additional_callees: ['p'],
+        parse_type: 'module',
+      },
+    );
+    this.UART.write(transpiled_code);
   }
 }
