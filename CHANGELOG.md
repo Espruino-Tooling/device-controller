@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.7](https://github.com/Espruino-Tooling/espruino-tools/compare/v1.2.6...v1.2.7) (2023-01-22)
+
+
+### Bug Fixes
+
+* removed step count, removed unused dependency jsdom ([93441de](https://github.com/Espruino-Tooling/espruino-tools/commit/93441de6ee5c05e46e3892ffd6cde9ec42c55fd3))
+
 ### [1.2.6](https://github.com/Espruino-Tooling/espruino-tools/compare/v1.2.5...v1.2.6) (2023-01-22)
 
 
