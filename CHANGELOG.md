@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.10](https://github.com/Espruino-Tooling/espruino-tools/compare/v1.2.9...v1.2.10) (2023-01-22)
+
+
+### Bug Fixes
+
+* updated transpiler version ([ca83be0](https://github.com/Espruino-Tooling/espruino-tools/commit/ca83be06665271462dd2f9f587f5d28e1998577f))
+
+### [1.2.9](https://github.com/Espruino-Tooling/espruino-tools/compare/v1.2.8...v1.2.9) (2023-01-22)
+
+
+### Bug Fixes
+
+* removedMiniParser ([ecba714](https://github.com/Espruino-Tooling/espruino-tools/commit/ecba714c4a81369ba45ef2f402a2a806d7b0a00d))
+
+### [1.2.8](https://github.com/Espruino-Tooling/espruino-tools/compare/v1.2.7...v1.2.8) (2023-01-22)
+
+
+### Bug Fixes
+
+* readded bad remove ([7b1aaeb](https://github.com/Espruino-Tooling/espruino-tools/commit/7b1aaeb1dd0a083577e178426ca704c7c92a54c9))
+
 ### [1.2.7](https://github.com/Espruino-Tooling/espruino-tools/compare/v1.2.6...v1.2.7) (2023-01-22)
 
 

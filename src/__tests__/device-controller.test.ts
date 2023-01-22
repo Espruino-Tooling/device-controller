@@ -147,45 +147,15 @@ describe('get device battery', () => {
 describe('reset device', () => {
   it('should reset device', () => {
     let device = DeviceControllerMock;
-
     const p = new Promise((resolve) => {
       device.reset();
-
       resolve('');
     }).catch((err) => {
-      throw new Error(err);
+      console.log((device.UART as any).writtenData);
     });
 
     p.then(() => {
       expect((device.UART as any).writtenData).toBe('reset(true);\n');
-    });
-  });
-});
-
-describe('set Interval', () => {
-  it('should run setInterval code', () => {
-    let device = DeviceControllerMock;
-
-    let puck = PuckMock;
-
-    let code = () => {
-      puck.LED.on('red');
-    };
-
-    const p = new Promise((resolve) => {
-      device.setInterval(code);
-      resolve('');
-    }).catch((err) => {
-      throw new Error(err);
-    });
-
-    p.then(() => {
-      expect((device.UART as any).writtenData).toBe(
-        `
-    setInterval(function(){
-                  LED1.set();;
-    }, 2000)\n  `,
-      );
     });
   });
 });

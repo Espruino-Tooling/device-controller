@@ -1,6 +1,6 @@
+import { transpile } from '@espruino-tools/transpiler';
 import { uart } from '@espruino-tools/uart';
 import { fetchToText } from './helpers/fetchHelper';
-import { miniEspParser } from './helpers/funcToString';
 import {
   digitalVals,
   IDeviceController,
@@ -172,11 +172,14 @@ export class DeviceController implements IDeviceController {
   }
 
   setInterval(func: Function, ms: number = 2000) {
-    this.UART.write(`
-    setInterval(function(){
-      ${miniEspParser(func)};
-    }, ${ms})
-  `);
+    let transpiled_code = transpile(
+      `DeviceController.setInterval(${func.toString()}, ${ms})`,
+      {
+        additional_callees: ['p'],
+        parse_type: 'module',
+      },
+    );
+    this.UART.write(transpiled_code);
   }
 
   /**
