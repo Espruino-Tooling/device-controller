@@ -61,17 +61,10 @@ export interface Accel {
   val(): Promise<AccelDumpType>;
   onMove(func: Function): void;
   onTilt(func: Function): void;
-  stepCount: AccelStep;
 }
 
 export interface Tilt {
   enable(): void;
   disable(): void;
   onTilt(func: Function): void;
-}
-
-export interface AccelStep {
-  enable(): void;
-  disable(): void;
-  get(): Promise<number>;
 }

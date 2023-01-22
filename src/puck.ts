@@ -2,7 +2,6 @@ import { DeviceController } from './device-controller';
 import { miniEspParser } from './helpers/funcToString';
 import {
   Accel,
-  AccelStep,
   AccelDumpType,
   IPuck,
   IR,
@@ -81,22 +80,6 @@ export class Puck extends DeviceController implements IPuck {
         ${miniEspParser(func)}
       });\n`);
     },
-
-    stepCount: {
-      enable: (): void => {
-        this.UART.write(`require("puckjsv2-accel-steps").on();
-        var espruino_tools_step_count = 0;
-        Puck.on('accel',function(a){
-          steps++;
-        });\n`);
-      },
-      disable: (): void => {
-        this.UART.write('require("puckjsv2-accel-steps").off();\n');
-      },
-      get: (): Promise<number> => {
-        return this.eval<number>('console.log(espruino_tools_step_count)');
-      },
-    } as AccelStep,
   };
 
   IR: IR = {
