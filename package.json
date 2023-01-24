@@ -1,6 +1,6 @@
 {
   "name": "@espruino-tools/core",
-  "version": "1.2.10",
+  "version": "1.2.11",
   "description": "An interactive Espruino package to simplify the code interaction between Espruino device and the javascript code.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

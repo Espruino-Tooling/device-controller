@@ -217,8 +217,7 @@ export class DeviceController implements IDeviceController {
    * helper function to grab functions from device
    */
   async getDeviceFunctions(): Promise<void> {
-    this.Call = {};
-    await this.dump().then((dumpedStr: any) => {
+    this.Call = await this.dump().then((dumpedStr: any) => {
       this.#mapStringFunctionToCall(
         this.#getFunctionNamesFromString(dumpedStr.data),
       );
