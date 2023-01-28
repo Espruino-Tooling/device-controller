@@ -11,6 +11,7 @@ export interface IDeviceController {
   getDeviceType(): Promise<string>;
   getBattery(): Promise<number>;
   eval<T>(code: string): Promise<T>;
+  quickWrite(code: string): void;
   upload(url: string, flash: boolean): void;
   getDeviceFunctions(): Promise<void>;
 }

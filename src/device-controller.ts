@@ -147,6 +147,20 @@ export class DeviceController implements IDeviceController {
 
   /**
    *
+   * > **WARNING**  THIS CODE DOES NO CHECKS AND IS ONLY AVAILABLE FOR SPEED
+   *                PURPOSES.
+   *
+   *                THIS SHOULD BE USED EXCLUSIVELY FOR WHEN CODE DOESNT NEED
+   *                TO BE SAVED OR YOU ALREADY KNOW THE METHODS AVAILABLE
+   *
+   * @param data code written in espruino native code NOT IN THIS LIBRARIES CODE
+   */
+  quickWrite(data: string): void {
+    this.UART.write(data);
+  }
+
+  /**
+   *
    * @param code code written in espruino native code, NOT IN THIS LIBRARIES CODE
    * @param flash
    */
